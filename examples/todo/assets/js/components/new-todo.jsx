@@ -13,9 +13,9 @@ const NewTodo = () => {
       autoFocus
       value={title}
       onChange={(event) => setTitle(event.target.value)}
-      onKeyPress={(event) => {
+      onKeyPress={async (event) => {
         if (event.key === 'Enter') {
-          dispatch(createTodo(title))
+          await dispatch(createTodo(title))
           setTitle('')
         }
       }}

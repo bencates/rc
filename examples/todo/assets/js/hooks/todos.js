@@ -1,13 +1,7 @@
 import {createContext, createElement, useContext, useReducer} from 'react'
 import {reducers} from '../actions/todos'
 
-export const initialState = {
-  todos: [
-    {id: 1, title: 'Taste Javascript', complete: true},
-    {id: 2, title: 'Buy a Unicorn', complete: false}
-  ],
-  nextTodoId: 3
-}
+export const initialState = {todos: [], nextTodoId: 1}
 
 export const reducer = (state, action) => {
   if (action.type in reducers) {
@@ -17,7 +11,13 @@ export const reducer = (state, action) => {
   }
 }
 
-export const useTodos = () => useReducer(reducer, initialState)
+export const useTodos = () => {
+  const [state, localDispatch] = useReducer(reducer, initialState)
+
+  const dispatch = (action) => Promise.resolve(localDispatch(action))
+
+  return [state, dispatch]
+}
 
 /////////////
 // Context //

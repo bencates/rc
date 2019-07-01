@@ -13,9 +13,9 @@ const EditTodo = React.forwardRef(({ todo, onComplete }, ref) => {
       value={title}
       onBlur={onComplete}
       onChange={(event) => setTitle(event.target.value)}
-      onKeyPress={(event) => {
+      onKeyPress={async (event) => {
         if (event.key === 'Enter') {
-          dispatch(changeTodoTitle(todo.id, title))
+          await dispatch(changeTodoTitle(todo.id, title))
           onComplete()
         }
       }}
