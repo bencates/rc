@@ -6,8 +6,11 @@ import TodoCount from './todo-count.jsx'
 import ClearCompleted from './clear-completed.jsx'
 import {getTodoCount} from '../selectors/todos'
 
+import {useSocket, useChannel} from '../hooks/channel'
+
 const Root = () => {
-  const [state, dispatch] = useTodos()
+  const socket = useSocket()
+  const [state, dispatch] = useChannel(socket, 'todos', {todos: []})
 
   const hasTodos = getTodoCount(state) > 0
 

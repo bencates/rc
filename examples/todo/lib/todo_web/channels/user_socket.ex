@@ -3,6 +3,7 @@ defmodule TodoWeb.UserSocket do
 
   ## Channels
   # channel "room:*", TodoWeb.RoomChannel
+  channel "todos", TodoWeb.TodosChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

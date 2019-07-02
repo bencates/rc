@@ -1,24 +1,6 @@
 import {createContext, createElement, useContext, useReducer} from 'react'
 import {reducers} from '../actions/todos'
 
-export const initialState = {todos: [], nextTodoId: 1}
-
-export const reducer = (state, action) => {
-  if (action.type in reducers) {
-    return reducers[action.type](state, action)
-  } else {
-    throw new Error(`Unknown action ${action.type}`)
-  }
-}
-
-export const useTodos = () => {
-  const [state, localDispatch] = useReducer(reducer, initialState)
-
-  const dispatch = (action) => Promise.resolve(localDispatch(action))
-
-  return [state, dispatch]
-}
-
 /////////////
 // Context //
 /////////////

@@ -9,9 +9,10 @@ defmodule Todo.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      TodoWeb.Endpoint
+      TodoWeb.Endpoint,
       # Starts a worker by calling: Todo.Worker.start_link(arg)
       # {Todo.Worker, arg},
+      Todo.TodosStore
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
