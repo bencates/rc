@@ -1,23 +1,5 @@
 defmodule Todo.TodosStore do
-  use Agent
-
-  def start_link(_) do
-    Agent.start_link(__MODULE__, :initial_state, [], name: __MODULE__)
-  end
-
-  def get_state() do
-    Agent.get(__MODULE__, & &1)
-  end
-
-  def dispatch(action) do
-    return = Agent.get_and_update(__MODULE__, __MODULE__, :reduce, [action])
-
-    TodoWeb.Endpoint.broadcast!("todos", "set_state", get_state())
-
-    return
-  end
-
-  # ===========================================================================
+  use RC.Store, endpoint: TodoWeb.Endpoint, channel: "todos"
 
   def initial_state(), do: %{todos: [], next_todo_id: 1}
 
@@ -28,12 +10,15 @@ defmodule Todo.TodosStore do
   @remove "todos/REMOVE"
   @clear_completed "todos/CLEAR_COMPLETED"
 
-  # def create!(title), do: dispatch(%{"type" => @create, "title" => title})
-  # def change_title!(id, title), do: dispatch(%{"type" => @change_title, "id" =>id, "title" => title})
-  # def toggle_complete!(id), do: dispatch(%{"type" => @toggle_complete, "id" =>id})
-  # def toggle_all_complete!(), do: dispatch(%{"type" => @toggle_all_complete})
-  # def remove!(id), do: dispatch(%{"type" => @remove, "id" => id})
-  # def clear_completed!(), do: dispatch(%{"type" => @clear_completed})
+  def create!(title), do: dispatch(%{"type" => @create, "title" => title})
+
+  def change_title!(id, title),
+    do: dispatch(%{"type" => @change_title, "id" => id, "title" => title})
+
+  def toggle_complete!(id), do: dispatch(%{"type" => @toggle_complete, "id" => id})
+  def toggle_all_complete!(), do: dispatch(%{"type" => @toggle_all_complete})
+  def remove!(id), do: dispatch(%{"type" => @remove, "id" => id})
+  def clear_completed!(), do: dispatch(%{"type" => @clear_completed})
 
   def reduce(state, %{"type" => @create, "title" => title}) do
     new_todo = %{id: state.next_todo_id, title: title, complete: false}
