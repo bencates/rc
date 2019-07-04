@@ -1,9 +1,9 @@
-defmodule ServerSideReducer.MixProject do
+defmodule RC.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :server_side_reducer,
+      app: :rc,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,

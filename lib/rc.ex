@@ -1,6 +1,6 @@
-defmodule ServerSideReducer do
+defmodule RC do
   @moduledoc """
-  Documentation for ServerSideReducer.
+  Documentation for RC.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule ServerSideReducer do
 
   ## Examples
 
-      iex> ServerSideReducer.hello()
+      iex> RC.hello()
       :world
 
   """
