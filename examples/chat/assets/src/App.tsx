@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react'
+import styled from 'styled-components'
+import {Normalize} from 'styled-normalize'
+
+import Header from './Header'
+
+const Window = styled.div`
+  display: grid;
+
+  margin: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  grid:
+    [row1-start] "header header" 4em [row1-end]
+    [row2-start] "rooms body" 1fr [row2-end]
+    / 20% auto;
+`
+
+const HeaderArea = styled.div`
+  grid-area: header;
+  background-color: #2f9dd4;
+`
+
+const RoomArea = styled.div`
+  grid-area: rooms;
+  background-color: #f7b483;
+`
+
+const BodyArea = styled.div`
+  grid-area: body;
+  background-color: #EEE;
+`
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Window>
+      <Normalize />
+
+      <HeaderArea>
+        <Header />
+      </HeaderArea>
+
+      <RoomArea />
+
+      <BodyArea />
+    </Window>
+  )
 }
 
-export default App;
+export default App
