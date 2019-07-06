@@ -1,14 +1,39 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-const Div = styled.div``;
-const H1 = styled.h1``;
+interface Props {
+  userName: string
+  logOut: () => void
+}
 
-const Header: React.FC = () => {
+const OuterContainer = styled.div`
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+`
+
+const InnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const Left = styled(InnerContainer)`
+  justify-content: flex-start;
+`
+
+const Right = styled(InnerContainer)`
+  justify-content: flex-end;
+`
+const Header: React.FC<Props> = ({userName, logOut}) => {
   return (
-    <Div>
-      <H1>Chat</H1>
-    </Div>
+    <OuterContainer>
+      <Left>
+        <h1>@{userName}</h1>
+      </Left>
+      <Right>
+        <button onClick={logOut}>Log Out</button>
+      </Right>
+    </OuterContainer>
   );
 }
 
