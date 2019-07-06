@@ -2,12 +2,12 @@ import * as React from 'react'
 import styled from 'styled-components'
 import {Normalize} from 'styled-normalize'
 
-import {withSocket} from './rc'
+import {SOCKET_URL} from './config'
+import {useSocket, withSocket} from './rc'
 
+import Loading from './Loading'
 import Header from './Header'
 
-// TODO: real server URL
-const socketUrl = 'ws://localhost:4000/socket'
 // TODO: real authentication
 const socketConfig = {}
 
@@ -41,8 +41,11 @@ const BodyArea = styled.div`
 `
 
 const App: React.FC = () => {
+  const {isConnected} = useSocket()
+
   return (
     <Window>
+      {!isConnected && <Loading />}
       <Normalize />
 
       <HeaderArea>
@@ -56,4 +59,4 @@ const App: React.FC = () => {
   )
 }
 
-export default withSocket(socketUrl, socketConfig, App)
+export default withSocket(SOCKET_URL, socketConfig, App)

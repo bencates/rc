@@ -1,20 +1,15 @@
-import {ComponentType, Context, createElement, createContext, useContext} from 'react'
-import {Socket, SocketConnectOption} from 'phoenix'
-
-const SocketContext = createContext(null) as Context<null | Socket>
+import {ComponentType, createElement, useContext} from 'react'
+import {SocketConnectOption} from 'phoenix'
+import SocketProvider, {SocketContext} from './SocketProvider'
 
 export const withSocket = (
-  url: string,
-  config: Partial<SocketConnectOption> = {},
+  endPoint: string,
+  opts: Partial<SocketConnectOption> = {},
   component: ComponentType
 ) => {
-  const socket = new Socket(url, config)
-
-  socket.connect()
-
   return (props: object) => createElement(
-    SocketContext.Provider,
-    {value: socket},
+    SocketProvider,
+    {endPoint, opts},
     createElement(component, props)
   )
 }

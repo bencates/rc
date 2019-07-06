@@ -5,6 +5,7 @@
 // export class TimeoutError extends Error {}
 
 export {withSocket, useSocket} from './socket'
+export {default as SocketProvider} from './SocketProvider'
 
 // // const patchState = (state, patch) => {
 // //   const deepPatch = (state, patch, key) => {
