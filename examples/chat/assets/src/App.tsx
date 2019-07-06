@@ -2,7 +2,14 @@ import * as React from 'react'
 import styled from 'styled-components'
 import {Normalize} from 'styled-normalize'
 
+import {withSocket} from './rc'
+
 import Header from './Header'
+
+// TODO: real server URL
+const socketUrl = 'ws://localhost:4000/socket'
+// TODO: real authentication
+const socketConfig = {}
 
 const Window = styled.div`
   display: grid;
@@ -49,4 +56,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default withSocket(socketUrl, socketConfig, App)
