@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useSocket} from './rc'
+import {useConnectionStatus} from './rc'
 
 import Loading from './Loading'
 import Header from './Header'
@@ -40,7 +40,7 @@ const BodyArea = styled.div`
   background-color: #EEE;
 `
 const Chat: React.FC<Props> = ({userName, logOut}) => {
-  const {isConnected} = useSocket()
+  const isConnected = useConnectionStatus()
 
   return (
     <Window>

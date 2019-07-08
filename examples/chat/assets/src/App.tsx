@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Normalize} from 'styled-normalize'
 
 import {SOCKET_URL} from './config'
-import {SocketProvider} from './rc'
+import {ChannelProvider} from './rc'
 
 import Chat from './Chat'
 import LogIn from './LogIn'
@@ -22,15 +22,15 @@ const App: React.FC = () => {
     }
   }, [currentUser])
 
-  const socketOpts = {params: {currentUser}}
+  const socketOpts = {params: {userName: currentUser}}
 
   return (
     <>
       <Normalize />
       {currentUser ? (
-        <SocketProvider endPoint={SOCKET_URL} opts={socketOpts}>
+        <ChannelProvider endPoint={SOCKET_URL} opts={socketOpts}>
           <Chat userName={currentUser} logOut={() => setCurrentUser(null)} />
-        </SocketProvider>
+        </ChannelProvider>
       ) : (
         <LogIn {...{setCurrentUser}} />
       )}

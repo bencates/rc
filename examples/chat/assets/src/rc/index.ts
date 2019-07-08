@@ -1,11 +1,10 @@
 // import {useState} from 'react'
-// import { Socket } from 'phoenix'
 // import { camelizeKeys } from 'humps'
 
 // export class TimeoutError extends Error {}
 
-export {withSocket, useSocket} from './socket'
-export {default as SocketProvider} from './SocketProvider'
+export {default as ChannelProvider} from './ChannelProvider'
+export {useConnectionStatus} from './hooks/connectionStatus'
 
 // // const patchState = (state, patch) => {
 // //   const deepPatch = (state, patch, key) => {
@@ -31,26 +30,6 @@ export {default as SocketProvider} from './SocketProvider'
 
 // //   return deepPatch(state, patch, null)
 // // }
-
-// export const useChannel = (socket, channelName, initialState = {}) => {
-//   const [state, setState] = useState(initialState)
-
-//   const [channel] = useState(() => {
-//     const channel = socket.channel(channelName)
-
-//     channel.on('set_state', newState => {
-//       setState(newState)
-//     })
-
-//     // channel.onError(() => store.commit('socketDisconnect'))
-
-//     channel.join()
-//       .receive('ok', serverState => setState(camelizeKeys(serverState)))
-//       // TODO: real timeout handling
-//       .receive('timeout', () => console.log('Networking issue. Still waiting...'))
-
-//     return channel
-//   })
 
 //   const [dispatch] = useState(() => {
 //     return async (action) => new Promise((resolve, reject) => {
