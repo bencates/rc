@@ -2,13 +2,20 @@ import * as React from 'react'
 import {Channel, SocketConnectOption} from 'phoenix'
 
 import {useSocket} from './hooks/socket'
+import {useChannelRegistry} from './hooks/channelRegistry'
 
-interface ContextState {
-  isConnected: boolean
-}
+import {ServerAction, ContextState} from './types'
 
-export const SocketContext = React.createContext<ContextState>({
-  isConnected: false
+export const ChannelContext = React.createContext<ContextState>({
+  isConnected: false,
+  getChannel: (name, initialState) => ({
+    channel: new Channel(name),
+    state: initialState,
+    dispatch: async (action: ServerAction) => Promise.reject(new Error("no provider")),
+    refCount: 0
+  }),
+  joinChannel: () => {},
+  leaveChannel: () => {}
 })
 
 interface Props {
@@ -16,16 +23,39 @@ interface Props {
   opts: Partial<SocketConnectOption>
 }
 
-const SocketProvider: React.FC<Props> = ({endPoint, opts, children}) => {
-  const {isConnected} = useSocket(endPoint, opts)
+const ChannelProvider: React.FC<Props> = ({endPoint, opts, children}) => {
+  const {socket, isConnected} = useSocket(endPoint, opts)
+
+  // TODO: handle socket replacement if endpoint or opts change
+  const {getChannel, joinChannel, leaveChannel} = useChannelRegistry(socket)
 
   return (
-    <SocketContext.Provider
-      value={{isConnected}}
+    <ChannelContext.Provider
+      value={{
+        isConnected,
+        getChannel,
+        joinChannel,
+        leaveChannel
+      }}
     >
       {children}
-    </SocketContext.Provider>
+    </ChannelContext.Provider>
   )
 }
 
-export default SocketProvider
+export default ChannelProvider
+
+
+interface Dispatch {
+  (o: {type: 'Foo'}): Promise<string>;
+  (o: {type: 'Bar'}): Promise<number>;
+}
+
+const doFooWithoutAssertion = () => ({type: 'foo'})
+const doFoo = (): ServerAction<string> => ({type: 'foo'})
+
+const dispatch = <T extends {}>(a: ServerAction<T>): Promise<T> => Promise.resolve('asdf') as unknown as Promise<T>;
+
+dispatch({type: 'Foo'}) // => Promise<void>
+
+dispatch(doFoo()) // => Promise<string>

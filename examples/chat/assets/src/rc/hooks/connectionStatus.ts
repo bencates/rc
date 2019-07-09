@@ -1,5 +1,5 @@
 import {useContext} from 'react'
 
-import {SocketContext} from '../SocketProvider'
+import {ChannelContext} from '../ChannelProvider'
 
-export const useConnectionStatus = () => useContext(SocketContext).isConnected
+export const useConnectionStatus = () => useContext(ChannelContext).isConnected
