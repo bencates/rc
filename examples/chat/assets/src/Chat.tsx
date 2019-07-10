@@ -1,10 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useConnectionStatus} from './rc'
+import {useConnectionStatus} from './rc-react'
 
 import Loading from './Loading'
 import Header from './Header'
+import RoomList from './RoomList'
 
 interface Props {
   userName: string,
@@ -50,7 +51,9 @@ const Chat: React.FC<Props> = ({userName, logOut}) => {
         <Header userName={userName} logOut={logOut} />
       </HeaderArea>
 
-      <RoomArea />
+      <RoomArea>
+        <RoomList />
+      </RoomArea>
 
       <BodyArea />
     </Window>

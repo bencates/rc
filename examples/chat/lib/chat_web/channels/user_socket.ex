@@ -2,7 +2,7 @@ defmodule ChatWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", ChatWeb.RoomChannel
+  channel "room_list", ChatWeb.RoomListChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -19,7 +19,7 @@ defmodule ChatWeb.UserSocket do
     {:ok, assign(socket, :user_name, user_name)}
   end
 
-  def connect(_params, socket, _connect_info) do
+  def connect(_params, _socket, _connect_info) do
     :error
   end
 

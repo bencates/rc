@@ -9,9 +9,10 @@ defmodule Chat.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      ChatWeb.Endpoint
-      # Starts a worker by calling: Chat.Worker.start_link(arg)
-      # {Chat.Worker, arg},
+      ChatWeb.Endpoint,
+
+      # Start the global room list store
+      Chat.RoomListStore
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

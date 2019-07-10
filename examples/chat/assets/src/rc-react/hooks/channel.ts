@@ -1,15 +1,16 @@
 import {useContext, useEffect} from 'react'
 
+import {ChannelReducer} from '../types'
 import {ChannelContext} from '../ChannelProvider'
 
-export function useChannel<S, T>(channelName: string, initialState: T) {
+export function useChannel<State>(channelName: string, initialState: State): [State, ChannelReducer['dispatch']] {
   const {
     getChannel,
     joinChannel,
     leaveChannel
   } = useContext(ChannelContext)
 
-  const channel = getChannel<T>(channelName, initialState)
+  const channel = getChannel(channelName, initialState)
 
   useEffect(() => {
     joinChannel(channelName)
