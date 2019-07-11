@@ -1,0 +1,13 @@
+{
+  "name": "@rc/rc",
+  "version": "0.1.0",
+  "description": "Reducer Channel",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Ben Cates <ben.cates@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/phoenix": "^1.4.2",
+    "typescript": "^3.5.3"
+  }
+}

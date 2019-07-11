@@ -1,7 +1,6 @@
 import {MutableRefObject, useCallback, useEffect, useRef, useReducer} from 'react'
 import {Socket} from 'phoenix'
-
-import Channel from '../../rc/channel'
+import {Channel} from '@rc/rc'
 
 import {ChannelBox, GetChannel, JoinChannel, LeaveChannel} from '../types'
 

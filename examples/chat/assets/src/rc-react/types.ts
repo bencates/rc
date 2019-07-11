@@ -1,4 +1,4 @@
-import Channel, {Action} from '../rc/channel'
+import {Channel, Action} from '@rc/rc'
 
 export type ServerAction = Action
 
