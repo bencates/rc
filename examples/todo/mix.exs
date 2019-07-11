@@ -40,7 +40,7 @@ defmodule Todo.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
 
-      {:rc, path: "../.."}
+      {:rc, path: "../../server"}
     ]
   end
 end

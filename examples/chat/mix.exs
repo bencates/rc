@@ -41,7 +41,7 @@ defmodule Chat.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
 
-      {:rc, path: "../.."},
+      {:rc, path: "../../server"},
 
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false}
     ]
