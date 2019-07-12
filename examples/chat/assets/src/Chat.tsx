@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useConnectionStatus} from './rc-react'
+import {useConnectionStatus} from '@rc/rc-react'
 
 import Loading from './Loading'
 import Header from './Header'

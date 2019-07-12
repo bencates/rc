@@ -1,13 +1,12 @@
 import * as React from 'react'
 
-import {useChannel} from './rc-react'
-import {ServerAction} from './rc-react/types'
+import {useChannel} from '@rc/rc-react'
 
 interface RoomListState {
   [name: string]: {name: string}
 }
 
-const createNewRoom: ServerAction = {type: 'CREATE', name: 'new_room', description: 'New Room'}
+const createNewRoom = {type: 'CREATE', name: 'new_room', description: 'New Room'}
 
 const RoomList: React.FC = () => {
   const [state, dispatch] = useChannel<RoomListState>('room_list', {})

@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Normalize} from 'styled-normalize'
 
 import {SOCKET_URL} from './config'
-import {ChannelProvider} from './rc-react'
+import {ChannelProvider} from '@rc/rc-react'
 
 import Chat from './Chat'
 import LogIn from './LogIn'

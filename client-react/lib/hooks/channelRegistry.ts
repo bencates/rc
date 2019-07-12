@@ -38,7 +38,9 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
       if (action.type === Action.Reset) {
         console.log(`Resetting channel registry`)
 
-        return Object.entries(channels).reduce((channels, [channelName, channelBox]) => {
+        return Object.keys(channels).reduce((reconnectedChannels, channelName) => {
+          const channelBox = channels[channelName]
+
           console.log(`Regenerating channel ${channelName}`)
           const channel = new Channel(socket.current, channelName, channelBox.initialState)
 
@@ -53,7 +55,7 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
             channel.join()
           }
 
-          return {channels, [channelName]: {
+          return {...reconnectedChannels, [channelName]: {
             ...channelBox,
             channel,
             state: channelBox.initialState,

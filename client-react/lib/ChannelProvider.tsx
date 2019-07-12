@@ -4,13 +4,13 @@ import {SocketConnectOption} from 'phoenix'
 import {useSocket} from './hooks/socket'
 import {useChannelRegistry} from './hooks/channelRegistry'
 
-import {ServerAction, ContextState} from './types'
+import {ContextState} from './types'
 
 export const ChannelContext = React.createContext<ContextState>({
   isConnected: false,
-  getChannel: (name, initialState) => ({
+  getChannel: ({}, initialState) => ({
     state: initialState,
-    dispatch: async (action: ServerAction) => Promise.reject(new Error("no provider")),
+    dispatch: async () => Promise.reject(new Error("no provider")),
   }),
   joinChannel: () => {},
   leaveChannel: () => {}

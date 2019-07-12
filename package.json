@@ -1,0 +1,4 @@
+{
+  "private": true,
+  "workspaces": ["client", "client-react", "examples/todo/assets", "examples/chat/assets"]
+}

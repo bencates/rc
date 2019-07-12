@@ -12,11 +12,7 @@ config :chat, ChatWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/react-scripts/bin/react-scripts.js",
-      "start",
-      cd: Path.expand("../assets", __DIR__)
-    ]
+    yarn: ["start", cd: Path.expand("../assets", __DIR__)]
   ]
 
 # ## SSL Support
