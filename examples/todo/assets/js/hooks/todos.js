@@ -1,5 +1,4 @@
-import {createContext, createElement, useContext, useReducer} from 'react'
-import {reducers} from '../actions/todos'
+import {createContext, createElement, useContext} from 'react'
 
 /////////////
 // Context //

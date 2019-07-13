@@ -10,5 +10,5 @@ export const changeTodoTitle = (id, title) => ({type: CHANGE_TITLE, id, title})
 export const toggleTodoComplete = (id) => ({type: TOGGLE_COMPLETE, id})
 export const toggleAllTodosComplete = () => ({type: TOGGLE_ALL_COMPLETE})
 export const removeTodo = (id) => ({type: REMOVE, id})
-export const clearCompletedTodos = (id) => ({type: CLEAR_COMPLETED})
+export const clearCompletedTodos = () => ({type: CLEAR_COMPLETED})
 

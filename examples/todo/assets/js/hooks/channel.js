@@ -62,7 +62,7 @@ export const useChannel = (socket, channelName, initialState = {}) => {
     channel.join()
       .receive('ok', serverState => setState(camelizeKeys(serverState)))
       // TODO: real timeout handling
-      .receive('timeout', () => console.log('Networking issue. Still waiting...'))
+      // .receive('timeout', () => console.log('Networking issue. Still waiting...'))
 
     return channel
   })
