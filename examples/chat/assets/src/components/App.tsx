@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {Normalize} from 'styled-normalize'
+import { Normalize } from 'styled-normalize'
 
-import {SOCKET_URL} from '../config'
-import {ChannelProvider} from '@rc/rc-react'
+import { SOCKET_URL } from '../config'
+import { ChannelProvider } from '@rc/rc-react'
 
 import Chat from './Chat'
 import LogIn from './LogIn'
@@ -11,7 +11,7 @@ const LOCAL_STORAGE_KEY = 'chat:username'
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = React.useState<null | string>(
-    localStorage.getItem(LOCAL_STORAGE_KEY)
+    localStorage.getItem(LOCAL_STORAGE_KEY),
   )
 
   React.useEffect(() => {
@@ -22,7 +22,7 @@ const App: React.FC = () => {
     }
   }, [currentUser])
 
-  const socketOpts = {params: {userName: currentUser}}
+  const socketOpts = { params: { userName: currentUser } }
 
   return (
     <>
@@ -32,7 +32,7 @@ const App: React.FC = () => {
           <Chat userName={currentUser} logOut={() => setCurrentUser(null)} />
         </ChannelProvider>
       ) : (
-        <LogIn {...{setCurrentUser}} />
+        <LogIn {...{ setCurrentUser }} />
       )}
     </>
   )

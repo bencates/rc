@@ -10,7 +10,7 @@ const LoadingOverlay = styled.div`
 
   background-color: #000;
   opacity: 0.4;
-`;
+`
 
 const LoadingContainer = styled.div`
   position: absolute;
@@ -31,7 +31,7 @@ const ReconnectingNotice = styled.div`
   padding: 0.6em 0.8em;
 
   border-radius: 0.6em;
-`;
+`
 
 const Loading: React.FC = () => (
   <>

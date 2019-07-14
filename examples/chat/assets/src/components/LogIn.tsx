@@ -19,15 +19,17 @@ interface Props {
   setCurrentUser: (currentUser: string) => void
 }
 
-const LogIn: React.FC<Props> = ({setCurrentUser}) => {
+const LogIn: React.FC<Props> = ({ setCurrentUser }) => {
   const [inputValue, setInputValue] = React.useState('')
 
   return (
     <Container>
-      <form onSubmit={() => {
-        setCurrentUser(inputValue)
-        setInputValue('')
-      }}>
+      <form
+        onSubmit={() => {
+          setCurrentUser(inputValue)
+          setInputValue('')
+        }}
+      >
         <label>
           <p>Login</p>
           <p>
@@ -35,7 +37,7 @@ const LogIn: React.FC<Props> = ({setCurrentUser}) => {
               type="text"
               placeholder="Username"
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={e => setInputValue(e.target.value)}
             />
           </p>
         </label>

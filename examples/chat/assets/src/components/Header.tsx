@@ -1,5 +1,5 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from 'react'
+import styled from 'styled-components'
 
 interface Props {
   userName: string
@@ -24,7 +24,7 @@ const Left = styled(InnerContainer)`
 const Right = styled(InnerContainer)`
   justify-content: flex-end;
 `
-const Header: React.FC<Props> = ({userName, logOut}) => {
+const Header: React.FC<Props> = ({ userName, logOut }) => {
   return (
     <OuterContainer>
       <Left>
@@ -34,8 +34,7 @@ const Header: React.FC<Props> = ({userName, logOut}) => {
         <button onClick={logOut}>Log Out</button>
       </Right>
     </OuterContainer>
-  );
+  )
 }
 
-export default Header;
-
+export default Header

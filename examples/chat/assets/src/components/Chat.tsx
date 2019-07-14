@@ -1,14 +1,14 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import {useConnectionStatus} from '@rc/rc-react'
+import { useConnectionStatus } from '@rc/rc-react'
 
 import Loading from './Loading'
 import Header from './Header'
 import RoomList from './RoomList'
 
 interface Props {
-  userName: string,
+  userName: string
   logOut: () => void
 }
 
@@ -21,8 +21,8 @@ const Window = styled.div`
   height: 100vh;
 
   grid:
-    [row1-start] "header header" 4em [row1-end]
-    [row2-start] "rooms body" 1fr [row2-end]
+    [row1-start] 'header header' 4em [row1-end]
+    [row2-start] 'rooms body' 1fr [row2-end]
     / 20% auto;
 `
 
@@ -38,9 +38,9 @@ const RoomArea = styled.div`
 
 const BodyArea = styled.div`
   grid-area: body;
-  background-color: #EEE;
+  background-color: #eee;
 `
-const Chat: React.FC<Props> = ({userName, logOut}) => {
+const Chat: React.FC<Props> = ({ userName, logOut }) => {
   const isConnected = useConnectionStatus()
 
   return (
