@@ -1,22 +1,24 @@
 import * as React from 'react'
-import {useDispatch} from '../hooks/todos.js'
-import {toggleTodoComplete, removeTodo} from '../actions/todos.js'
+import {
+  useTodos,
+  useDispatch,
+  toggleTodoComplete,
+  removeTodo
+} from '../todos.js'
 
 import EditTodo from './edit-todo.jsx'
 
 // List items should get the className `editing` when editing and `completed`
 // when marked as completed
 const Todo = ({ todo }) => {
-  const dispatch = useDispatch()
-  const [isEditing, setEditing] = React.useState(false);
-  const editTodoRef = React.useRef();
+  const [{}, dispatch] = useTodos()
+
+  const [isEditing, setEditing] = React.useState(false)
+  const editTodoRef = React.useRef()
 
   const classNames = []
   if (isEditing) classNames.push('editing')
   if (todo.complete) classNames.push('completed')
-
-  const startEditing = () => setEditing(true)
-  const stopEditing = () => setEditing(false)
 
   React.useEffect(() => {
     if (isEditing) {
@@ -27,7 +29,7 @@ const Todo = ({ todo }) => {
   return (
     <li className={classNames.join(' ')}>
       {isEditing ? (
-        <EditTodo ref={editTodoRef} todo={todo} onComplete={stopEditing} />
+        <EditTodo ref={editTodoRef} todo={todo} onComplete={() => setEditing(false)} />
       ) : (
         <div className="view">
           <input

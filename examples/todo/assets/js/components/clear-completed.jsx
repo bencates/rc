@@ -1,11 +1,10 @@
 import * as React from 'react'
-import {useSelector, useDispatch} from '../hooks/todos'
-import {areAnyTodosComplete} from '../selectors/todos'
-import {clearCompletedTodos} from '../actions/todos'
+import {useTodos, areAnyTodosComplete, clearCompletedTodos} from '../todos'
 
 const ClearCompleted = () => {
-  const dispatch = useDispatch()
-  const anyComplete = useSelector(areAnyTodosComplete)
+  const [state, dispatch] = useTodos()
+
+  const anyComplete = areAnyTodosComplete(state)
 
   return anyComplete && (
     <button

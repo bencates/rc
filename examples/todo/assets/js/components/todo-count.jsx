@@ -1,9 +1,11 @@
 import * as React from 'react'
-import {useSelector} from '../hooks/todos'
-import {getTodoCount} from '../selectors/todos'
+import {useChannel} from '@rc/rc-react'
+import {useTodos, getTodoCount} from '../todos'
 
 const TodoCount = () => {
-  const todoCount = useSelector(getTodoCount)
+  const [state] = useTodos()
+
+  const todoCount = getTodoCount(state)
 
   const count = todoCount === 0 ? 'no' : todoCount
   const plural = todoCount !== 1

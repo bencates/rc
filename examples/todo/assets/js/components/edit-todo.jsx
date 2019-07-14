@@ -1,9 +1,8 @@
 import * as React from 'react'
-import {useDispatch} from '../hooks/todos.js'
-import {changeTodoTitle} from '../actions/todos.js'
+import {useTodos, changeTodoTitle} from '../todos.js'
 
 const EditTodo = React.forwardRef(({ todo, onComplete }, ref) => {
-  const dispatch = useDispatch()
+  const [{}, dispatch] = useTodos()
   const [title, setTitle] = React.useState(todo.title);
 
   return (

@@ -1,12 +1,14 @@
 import * as React from 'react'
-import {useSelector} from '../hooks/todos'
-import {getTodos} from '../selectors/todos'
+import {useChannel} from '@rc/rc-react'
+import {useTodos, getTodos} from '../todos'
 
 import Todo from './todo.jsx'
 import ToggleAll from './toggle-all.jsx'
 
 const TodoList = () => {
-  const todos = useSelector(getTodos)
+  const [state] = useTodos()
+
+  const todos = getTodos(state)
 
   return (
     <section className="main">

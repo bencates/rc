@@ -1,12 +1,14 @@
 import * as React from 'react'
-import {useSelector, useDispatch} from '../hooks/todos'
-import {areAllTodosComplete} from '../selectors/todos'
-import {toggleAllTodosComplete} from '../actions/todos'
+import {
+  useTodos,
+  areAllTodosComplete,
+  toggleAllTodosComplete
+} from '../todos'
 
 const ToggleAll = () => {
-  const dispatch = useDispatch()
+  const [state, dispatch] = useTodos()
 
-  const allComplete = useSelector(areAllTodosComplete)
+  const allComplete = areAllTodosComplete(state)
 
   return <>
     <input

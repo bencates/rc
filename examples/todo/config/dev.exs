@@ -12,7 +12,7 @@ config :todo, TodoWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    yarn: ["run", "dev" cd: Path.expand("../assets", __DIR__)]
+    yarn: ["run", "dev", cd: Path.expand("../assets", __DIR__)]
   ]
 
 # ## SSL Support

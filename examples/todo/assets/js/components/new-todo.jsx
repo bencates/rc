@@ -1,9 +1,9 @@
 import * as React from 'react'
-import {useDispatch} from '../hooks/todos.js'
-import {createTodo} from '../actions/todos'
+import {useChannel} from '@rc/rc-react'
+import {useTodos, createTodo} from '../todos'
 
 const NewTodo = () => {
-  const dispatch = useDispatch()
+  const [{}, dispatch] = useTodos()
   const [title, setTitle] = React.useState('');
 
   return (
