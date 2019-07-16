@@ -1,48 +1,33 @@
 import * as React from 'react'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  background: #e09ee6;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+import { Box, Button, Form, FormField } from 'grommet'
+import { Login as LoginIcon } from 'grommet-icons'
 
 interface Props {
   setCurrentUser: (currentUser: string) => void
 }
 
-const LogIn: React.FC<Props> = ({ setCurrentUser }) => {
-  const [inputValue, setInputValue] = React.useState('')
+interface SubmitEvent extends React.FormEvent<HTMLFormElement> {
+  value: {
+    username: string
+  }
+}
 
+const LogIn: React.FC<Props> = ({ setCurrentUser }) => {
   return (
-    <Container>
-      <form
-        onSubmit={() => {
-          setCurrentUser(inputValue)
-          setInputValue('')
-        }}
+    <Box
+      fill
+      direction="column"
+      justify="center"
+      align="center"
+      background="brand"
+    >
+      <Form
+        onSubmit={(event: SubmitEvent) => setCurrentUser(event.value.username)}
       >
-        <label>
-          <p>Login</p>
-          <p>
-            <input
-              type="text"
-              placeholder="Username"
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-            />
-          </p>
-        </label>
-      </form>
-    </Container>
+        <FormField name="username" label="Choose a handle" />
+        <Button type="submit" primary icon={<LoginIcon />} label="Log In" />
+      </Form>
+    </Box>
   )
 }
 
