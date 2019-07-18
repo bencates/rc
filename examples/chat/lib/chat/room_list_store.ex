@@ -1,12 +1,12 @@
 defmodule Chat.RoomListStore do
   use RC.Store, endpoint: ChatWeb.Endpoint, channel: "room_list"
 
-  @type room :: %{
-    name: String.t(),
-    description: String.t()
-  }
+  @type room :: %{}
 
   @type state :: %{optional(String.t()) => room()}
+
+  # TODO: real action type
+  @type action :: term()
 
   @spec initial_state() :: state()
   def initial_state(), do: %{}
@@ -14,13 +14,11 @@ defmodule Chat.RoomListStore do
   @create "CREATE"
   @destroy "DESTROY"
 
-  def reduce(state, %{"type" => @create, "name" => name} = action) do
-    new_channel = %{
-      name: name,
-      description: Map.get(action, "description", name)
-    }
+  @spec reduce(state(), action()) :: {:ok, state()}
+  def reduce(state, action)
 
-    {:ok, Map.put(state, name, new_channel)}
+  def reduce(state, %{"type" => @create, "name" => name}) do
+    {:ok, Map.put_new(state, name, %{})}
   end
 
   def reduce(state, %{"type" => @destroy, "name" => name}) do

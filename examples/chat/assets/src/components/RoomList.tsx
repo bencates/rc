@@ -1,44 +1,24 @@
 import * as React from 'react'
-import styled from 'styled-components'
-import { Box, BoxProps, Button, Text } from 'grommet'
+import { Box, BoxProps, Text } from 'grommet'
 
-import { useChannel } from '@rc/rc-react'
-
-interface RoomListState {
-  [name: string]: { name: string }
-}
-
-const UL = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`
-
-const createNewRoom = {
-  type: 'CREATE',
-  name: 'new_room_2',
-  description: 'New Room',
-}
+import NewRoom from './NewRoom'
+import { useRoomList, getRooms } from '../channels/room-list'
 
 const RoomList: React.FC<BoxProps> = props => {
-  const [state, dispatch] = useChannel<RoomListState>('room_list', {})
+  const [roomListState] = useRoomList()
+  const rooms = getRooms(roomListState)
 
   return (
-    <Box as="nav" background="neutral-3" pad="small" {...props}>
-      <UL>
-        {Object.values(state).map(room => (
-          <Text as="li" key={room.name} size="large">
-            {room.name}
+    <Box as="nav" background="neutral-3" {...props}>
+      <Box as="ul" pad="small" style={{ listStyle: 'none' }}>
+        {rooms.map(room => (
+          <Text as="li" key={room} size="large">
+            {room}
           </Text>
         ))}
-      </UL>
+      </Box>
 
-      <Button
-        label="New Room"
-        margin={{ top: 'auto' }}
-        color="accent-3"
-        onClick={() => dispatch(createNewRoom)}
-      />
+      <NewRoom margin={{ top: 'auto' }} />
     </Box>
   )
 }
