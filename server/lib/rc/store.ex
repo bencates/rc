@@ -3,9 +3,11 @@ defmodule RC.Store do
     quote do
       use Agent
 
-      def start_link(), do: Agent.start_link(__MODULE__, :initial_state, [])
+      def start_link(opts \\ []) do
+        opts = Keyword.put_new(opts, :name, __MODULE__)
 
-      def start_link(_), do: Agent.start_link(__MODULE__, :initial_state, [], name: __MODULE__)
+        Agent.start_link(__MODULE__, :initial_state, [], opts)
+      end
 
       @doc """
       Retrieve a value from the store. Accepts the same query syntax as `Kernel.get_in/2`.
@@ -20,8 +22,9 @@ defmodule RC.Store do
       @doc """
       Dispatch an action to the store.
       """
-      def dispatch(agent \\ __MODULE__, action),
-        do: Agent.get_and_update(agent, RC.Store, :dispatch, [__MODULE__, unquote(config), action])
+      def dispatch(store \\ __MODULE__, action) do
+        Agent.get_and_update(store, RC.Store, :dispatch, [__MODULE__, unquote(config), action])
+      end
     end
   end
 
@@ -39,6 +42,7 @@ defmodule RC.Store do
   rescue
     FunctionClauseError ->
       {%{error: "no action matching #{inspect(action)}"}, state}
+
     error ->
       {%{error: error}, state}
   end

@@ -1,33 +1,39 @@
-if Code.ensure_loaded?(Phoenix.Channel) do
+if [Phoenix.Channel, Phoenix.Socket] |> Enum.all?(&Code.ensure_loaded?/1) do
   defmodule RC.Channel do
-    def join(store, socket) do
-      state = store.get_state()
+    alias Phoenix.{Channel, Socket}
+
+    def join(socket, store_module), do: join(socket, store_module, store_module)
+
+    def join(socket, store_module, store_pid) do
+      state = store_module.get_state(store_pid)
 
       socket =
         socket
-        |> put_in([Access.key!(:assigns), :rc_store], store)
-        |> put_in([Access.key!(:assigns), :rc_prev_state], state)
+        |> Socket.assign(:rc_store, {store_module, store_pid})
+
+      # |> Socket.assign(:rc_prev_state, state)
 
       {:ok, state, socket}
     end
 
-    def handle_dispatch(action, socket) do
-      result = store(socket).dispatch(action)
+    def handle_dispatch(socket, action) do
+      {store_module, store_pid} = socket.assigns.rc_store
+
+      result = store_module.dispatch(store_pid, action)
 
       reply = if is_atom(result), do: result, else: {:ok, result}
 
       {:reply, reply, socket}
     end
 
-    def handle_set_state(state, socket) do
+    def handle_set_state(socket, state) do
       # TODO: patch state
-      Phoenix.Channel.push(socket, "set_state", state)
+      Channel.push(socket, "set_state", state)
 
+      # {:noreply, Socket.assign(socket, :rc_prev_state, state)}
       {:noreply, socket}
     end
 
-    defp store(socket), do: socket.assigns[:rc_store]
-
-    defp prev_state(socket), do: socket.assigns[:rc_prev_state]
+    # defp prev_state(socket), do: socket.assigns.rc_prev_state
   end
 end
