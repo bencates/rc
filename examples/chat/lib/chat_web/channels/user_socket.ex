@@ -3,6 +3,7 @@ defmodule ChatWeb.UserSocket do
 
   ## Channels
   channel "room_list", ChatWeb.RoomListChannel
+  channel "room:*", ChatWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

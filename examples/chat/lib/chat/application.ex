@@ -11,8 +11,9 @@ defmodule Chat.Application do
       # Start the endpoint when the application starts
       ChatWeb.Endpoint,
 
-      # Start the global room list store
-      Chat.RoomListStore
+      # Start the room list store and the room store registry
+      Chat.RoomListStore,
+      {Registry, keys: :unique, name: Chat.RoomStore.Registry}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
