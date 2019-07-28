@@ -3,7 +3,7 @@ import {
   useTodos,
   useDispatch,
   toggleTodoComplete,
-  removeTodo
+  removeTodo,
 } from '../todos.js'
 
 import EditTodo from './edit-todo.jsx'
@@ -29,7 +29,11 @@ const Todo = ({ todo }) => {
   return (
     <li className={classNames.join(' ')}>
       {isEditing ? (
-        <EditTodo ref={editTodoRef} todo={todo} onComplete={() => setEditing(false)} />
+        <EditTodo
+          ref={editTodoRef}
+          todo={todo}
+          onComplete={() => setEditing(false)}
+        />
       ) : (
         <div className="view">
           <input
@@ -39,9 +43,7 @@ const Todo = ({ todo }) => {
             onChange={() => dispatch(toggleTodoComplete(todo.id))}
           />
 
-          <label onClick={() => setEditing(true)}>
-            {todo.title}
-          </label>
+          <label onClick={() => setEditing(true)}>{todo.title}</label>
 
           <button
             className="destroy"

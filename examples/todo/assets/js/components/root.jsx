@@ -1,6 +1,6 @@
 import * as React from 'react'
 import TodoApp from './todo-app.jsx'
-import {ChannelProvider} from '@rc/rc-react'
+import { ChannelProvider } from '@rc/rc-react'
 
 const opts = {}
 

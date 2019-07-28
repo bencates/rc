@@ -3,7 +3,7 @@ import NewTodo from './new-todo.jsx'
 import TodoList from './todo-list.jsx'
 import TodoCount from './todo-count.jsx'
 import ClearCompleted from './clear-completed.jsx'
-import {useTodos, getTodoCount} from '../todos'
+import { useTodos, getTodoCount } from '../todos'
 
 const TodoApp = () => {
   const [state] = useTodos()
@@ -17,14 +17,15 @@ const TodoApp = () => {
         <NewTodo />
       </header>
 
-      {hasTodos && <>
-        <TodoList />
+      {hasTodos && (
+        <>
+          <TodoList />
 
-        <footer className="footer">
-          <TodoCount />
+          <footer className="footer">
+            <TodoCount />
 
-          {/* Remove this if you don't implement routing */}
-          {/*
+            {/* Remove this if you don't implement routing */}
+            {/*
           <ul className="filters">
             <li>
               <a className="selected" href="#/">All</a>
@@ -38,12 +39,12 @@ const TodoApp = () => {
           </ul>
           */}
 
-          <ClearCompleted />
-        </footer>
-      </>}
+            <ClearCompleted />
+          </footer>
+        </>
+      )}
     </section>
   )
 }
 
 export default TodoApp
-

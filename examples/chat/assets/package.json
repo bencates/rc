@@ -33,12 +33,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "prettier": {
-    "parser": "typescript",
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

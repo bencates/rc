@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {useChannel} from '@rc/rc-react'
-import {useTodos, getTodoCount} from '../todos'
+import { useChannel } from '@rc/rc-react'
+import { useTodos, getTodoCount } from '../todos'
 
 const TodoCount = () => {
   const [state] = useTodos()

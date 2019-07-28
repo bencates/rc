@@ -1,4 +1,18 @@
 {
   "private": true,
-  "workspaces": ["client", "client-react", "examples/todo/assets", "examples/chat/assets"]
+  "workspaces": [
+    "client",
+    "client-react",
+    "examples/todo/assets",
+    "examples/chat/assets"
+  ],
+  "prettier": {
+    "parser": "typescript",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
 }

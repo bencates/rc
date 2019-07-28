@@ -1,7 +1,10 @@
-import {useState, useRef, useEffect} from 'react'
-import {Socket, SocketConnectOption} from 'phoenix'
+import { useState, useRef, useEffect } from 'react'
+import { Socket, SocketConnectOption } from 'phoenix'
 
-export const useSocket = (endPoint: string, opts: Partial<SocketConnectOption>) => {
+export const useSocket = (
+  endPoint: string,
+  opts: Partial<SocketConnectOption>,
+) => {
   const [isConnected, setIsConnected] = useState(false)
   const socket = useRef(new Socket(endPoint, opts))
 
@@ -18,6 +21,5 @@ export const useSocket = (endPoint: string, opts: Partial<SocketConnectOption>) 
     }
   }, [endPoint, opts])
 
-  return {socket, isConnected}
+  return { socket, isConnected }
 }
-

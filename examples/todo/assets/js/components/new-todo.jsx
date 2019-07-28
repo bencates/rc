@@ -1,10 +1,10 @@
 import * as React from 'react'
-import {useChannel} from '@rc/rc-react'
-import {useTodos, createTodo} from '../todos'
+import { useChannel } from '@rc/rc-react'
+import { useTodos, createTodo } from '../todos'
 
 const NewTodo = () => {
   const [{}, dispatch] = useTodos()
-  const [title, setTitle] = React.useState('');
+  const [title, setTitle] = React.useState('')
 
   return (
     <input
@@ -12,8 +12,8 @@ const NewTodo = () => {
       placeholder="What needs to be done?"
       autoFocus
       value={title}
-      onChange={(event) => setTitle(event.target.value)}
-      onKeyPress={async (event) => {
+      onChange={event => setTitle(event.target.value)}
+      onKeyPress={async event => {
         if (event.key === 'Enter') {
           await dispatch(createTodo(title))
           setTitle('')

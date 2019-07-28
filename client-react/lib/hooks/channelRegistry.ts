@@ -1,8 +1,14 @@
-import {MutableRefObject, useCallback, useEffect, useRef, useReducer} from 'react'
-import {Socket} from 'phoenix'
-import {Channel} from '@rc/rc'
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useReducer,
+} from 'react'
+import { Socket } from 'phoenix'
+import { Channel } from '@rc/rc'
 
-import {ChannelBox, GetChannel, JoinChannel, LeaveChannel} from '../types'
+import { ChannelBox, GetChannel, JoinChannel, LeaveChannel } from '../types'
 
 type ChannelList = Record<string, ChannelBox<any>>
 
@@ -12,23 +18,27 @@ enum Action {
   Leave = 'LEAVE',
   Remove = 'REMOVE',
   Reset = 'RESET',
-  SetState = 'SET_STATE'
+  SetState = 'SET_STATE',
 }
 
 type ReducerAction =
-  {type: Action.Add; channelName: string; channelBox: Omit<ChannelBox<any>, 'refCount'>} |
-  {type: Action.Join; channelName: string} |
-  {type: Action.Leave; channelName: string} |
-  {type: Action.Remove; channelName: string} |
-  {type: Action.Reset} |
-  {type: Action.SetState; channelName: string; state: object}
+  | {
+      type: Action.Add
+      channelName: string
+      channelBox: Omit<ChannelBox<any>, 'refCount'>
+    }
+  | { type: Action.Join; channelName: string }
+  | { type: Action.Leave; channelName: string }
+  | { type: Action.Remove; channelName: string }
+  | { type: Action.Reset }
+  | { type: Action.SetState; channelName: string; state: object }
 
 export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
   const prevSocket = useRef(socket.current)
 
   useEffect(() => {
     if (prevSocket.current !== socket.current) {
-      dispatch({type: Action.Reset})
+      dispatch({ type: Action.Reset })
       prevSocket.current = socket.current
     }
   })
@@ -38,30 +48,40 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
       if (action.type === Action.Reset) {
         console.log(`Resetting channel registry`)
 
-        return Object.keys(channels).reduce((reconnectedChannels, channelName) => {
-          const channelBox = channels[channelName]
+        return Object.keys(channels).reduce(
+          (reconnectedChannels, channelName) => {
+            const channelBox = channels[channelName]
 
-          console.log(`Regenerating channel ${channelName}`)
-          const channel = new Channel(socket.current, channelName, channelBox.initialState)
+            console.log(`Regenerating channel ${channelName}`)
+            const channel = new Channel(
+              socket.current,
+              channelName,
+              channelBox.initialState,
+            )
 
-          channel.onState((state: object) => {
-            dispatch({type: Action.SetState, channelName, state})
-          })
+            channel.onState((state: object) => {
+              dispatch({ type: Action.SetState, channelName, state })
+            })
 
-          if (channelBox.refCount > 0) {
-            console.log(`Connecting to channel "${channelName}"`)
+            if (channelBox.refCount > 0) {
+              console.log(`Connecting to channel "${channelName}"`)
 
-            channelBox.channel.leave()
-            channel.join()
-          }
+              channelBox.channel.leave()
+              channel.join()
+            }
 
-          return {...reconnectedChannels, [channelName]: {
-            ...channelBox,
-            channel,
-            state: channelBox.initialState,
-            dispatch: channel.dispatch.bind(channel)
-          }}
-        }, {})
+            return {
+              ...reconnectedChannels,
+              [channelName]: {
+                ...channelBox,
+                channel,
+                state: channelBox.initialState,
+                dispatch: channel.dispatch.bind(channel),
+              },
+            }
+          },
+          {},
+        )
       }
 
       const channelName = action.channelName
@@ -71,11 +91,16 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
         case Action.Add:
           console.log(`Adding channel ${channelName}`)
 
-          return {...channels, [channelName]: {...action.channelBox, refCount: 0}}
+          return {
+            ...channels,
+            [channelName]: { ...action.channelBox, refCount: 0 },
+          }
 
         case Action.Join:
           if (channelBox) {
-            console.log(`Joining channel "${channelName}" (${channelBox.refCount + 1})`)
+            console.log(
+              `Joining channel "${channelName}" (${channelBox.refCount + 1})`,
+            )
 
             if (channelBox.refCount === 0) {
               console.log(`Connecting to channel "${channelName}"`)
@@ -83,14 +108,22 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
               channelBox.channel.join()
             }
 
-            return {...channels, [channelName]: {...channelBox, refCount: channelBox.refCount + 1}}
+            return {
+              ...channels,
+              [channelName]: {
+                ...channelBox,
+                refCount: channelBox.refCount + 1,
+              },
+            }
           } else {
             return channels
           }
 
         case Action.Leave:
           if (channelBox) {
-            console.log(`Leaving channel "${channelName}" (${channelBox.refCount - 1})`)
+            console.log(
+              `Leaving channel "${channelName}" (${channelBox.refCount - 1})`,
+            )
 
             if (channelBox.refCount === 1) {
               console.log(`Disconnecting from channel "${channelName}"`)
@@ -98,7 +131,13 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
               channelBox.channel.leave()
             }
 
-            return {...channels, [channelName]: {...channelBox, refCount: channelBox.refCount - 1}}
+            return {
+              ...channels,
+              [channelName]: {
+                ...channelBox,
+                refCount: channelBox.refCount - 1,
+              },
+            }
           } else {
             return channels
           }
@@ -106,15 +145,18 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
         case Action.Remove: {
           console.log(`Removing channel "${channelName}"`)
 
-          const {[channelName]: omitted, ...newState} = channels
+          const { [channelName]: omitted, ...newState } = channels
           return newState
         }
 
         case Action.SetState:
-          return {...channels, [channelName]: {...channelBox, state: action.state}}
+          return {
+            ...channels,
+            [channelName]: { ...channelBox, state: action.state },
+          }
       }
     },
-    {}
+    {},
   )
 
   return {
@@ -126,29 +168,35 @@ export const useChannelRegistry = (socket: MutableRefObject<Socket>) => {
           const channel = new Channel(socket.current, channelName, initialState)
 
           channel.onState((state: object) => {
-            dispatch({type: Action.SetState, channelName, state})
+            dispatch({ type: Action.SetState, channelName, state })
           })
 
           const serverDispatch = channel.dispatch.bind(channel)
 
-          const channelBox = {channel, initialState, state: initialState, dispatch: serverDispatch, refCount: 0}
+          const channelBox = {
+            channel,
+            initialState,
+            state: initialState,
+            dispatch: serverDispatch,
+            refCount: 0,
+          }
 
-          dispatch({type: Action.Add, channelName, channelBox})
+          dispatch({ type: Action.Add, channelName, channelBox })
 
           return channelBox
         }
       },
-      [socket, channels]
+      [socket, channels],
     ),
 
     joinChannel: useCallback<JoinChannel>((channelName: string) => {
-      dispatch({type: Action.Join, channelName})
+      dispatch({ type: Action.Join, channelName })
     }, []),
 
     leaveChannel: useCallback<LeaveChannel>((channelName: string) => {
-      dispatch({type: Action.Leave, channelName})
+      dispatch({ type: Action.Leave, channelName })
     }, []),
 
-    reset: useCallback(() => dispatch({type: Action.Reset}), [])
+    reset: useCallback(() => dispatch({ type: Action.Reset }), []),
   }
 }
