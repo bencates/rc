@@ -1,14 +1,13 @@
 import * as React from 'react'
-import { useChannel } from '@rc/rc-react'
-import { useTodos, getTodos } from '../todos'
+import { useSelector } from 'react-redux'
+
+import { getTodos } from '../channels/todos'
 
 import Todo from './todo.jsx'
 import ToggleAll from './toggle-all.jsx'
 
 const TodoList = () => {
-  const [state] = useTodos()
-
-  const todos = getTodos(state)
+  const todos = useSelector(getTodos)
 
   return (
     <section className="main">

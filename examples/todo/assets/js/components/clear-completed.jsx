@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { useTodos, areAnyTodosComplete, clearCompletedTodos } from '../todos'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { areAnyTodosComplete, clearCompletedTodos } from '../channels/todos'
 
 const ClearCompleted = () => {
-  const [state, dispatch] = useTodos()
+  const dispatch = useDispatch()
 
-  const anyComplete = areAnyTodosComplete(state)
+  const anyComplete = useSelector(areAnyTodosComplete)
 
   return (
     anyComplete && (

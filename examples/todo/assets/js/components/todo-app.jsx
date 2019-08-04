@@ -1,14 +1,15 @@
 import * as React from 'react'
+import { useSelector } from 'react-redux'
+
+import { getTodoCount } from '../channels/todos'
+
 import NewTodo from './new-todo.jsx'
 import TodoList from './todo-list.jsx'
 import TodoCount from './todo-count.jsx'
 import ClearCompleted from './clear-completed.jsx'
-import { useTodos, getTodoCount } from '../todos'
 
 const TodoApp = () => {
-  const [state] = useTodos()
-
-  const hasTodos = getTodoCount(state) > 0
+  const hasTodos = useSelector(getTodoCount) > 0
 
   return (
     <section className="todoapp">

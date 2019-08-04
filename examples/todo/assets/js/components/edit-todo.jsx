@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { useTodos, changeTodoTitle } from '../todos.js'
+import { useDispatch } from 'react-redux'
+
+import { changeTodoTitle } from '../channels/todos.js'
 
 const EditTodo = React.forwardRef(({ todo, onComplete }, ref) => {
-  const [{}, dispatch] = useTodos()
+  const dispatch = useDispatch()
   const [title, setTitle] = React.useState(todo.title)
 
   return (

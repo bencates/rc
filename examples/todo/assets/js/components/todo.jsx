@@ -1,30 +1,31 @@
 import * as React from 'react'
-import {
-  useTodos,
-  useDispatch,
-  toggleTodoComplete,
-  removeTodo,
-} from '../todos.js'
+import { useDispatch } from 'react-redux'
+
+import { toggleTodoComplete, removeTodo } from '../channels/todos.js'
 
 import EditTodo from './edit-todo.jsx'
 
-// List items should get the className `editing` when editing and `completed`
-// when marked as completed
+const useFocus = isFocused => {
+  const focusTargetRef = React.useRef()
+
+  React.useEffect(() => {
+    if (isFocused) {
+      focusTargetRef.current.focus()
+    }
+  }, [isFocused])
+
+  return focusTargetRef
+}
+
 const Todo = ({ todo }) => {
-  const [{}, dispatch] = useTodos()
+  const dispatch = useDispatch()
 
   const [isEditing, setEditing] = React.useState(false)
-  const editTodoRef = React.useRef()
+  const editTodoRef = useFocus(isEditing)
 
   const classNames = []
   if (isEditing) classNames.push('editing')
   if (todo.complete) classNames.push('completed')
-
-  React.useEffect(() => {
-    if (isEditing) {
-      editTodoRef.current.focus()
-    }
-  }, [isEditing])
 
   return (
     <li className={classNames.join(' ')}>

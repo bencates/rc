@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { useChannel } from '@rc/rc-react'
-import { useTodos, createTodo } from '../todos'
+import { useDispatch } from 'react-redux'
+
+import { createTodo } from '../channels/todos'
 
 const NewTodo = () => {
-  const [{}, dispatch] = useTodos()
   const [title, setTitle] = React.useState('')
+  const dispatch = useDispatch()
 
   return (
     <input

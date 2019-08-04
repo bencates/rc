@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { useTodos, areAllTodosComplete, toggleAllTodosComplete } from '../todos'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { areAllTodosComplete, toggleAllTodosComplete } from '../channels/todos'
 
 const ToggleAll = () => {
-  const [state, dispatch] = useTodos()
+  const dispatch = useDispatch()
 
-  const allComplete = areAllTodosComplete(state)
+  const allComplete = useSelector(areAllTodosComplete)
 
   return (
     <>

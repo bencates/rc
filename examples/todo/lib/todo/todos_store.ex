@@ -10,23 +10,25 @@ defmodule Todo.TodosStore do
   @remove "todos/REMOVE"
   @clear_completed "todos/CLEAR_COMPLETED"
 
-  def create!(title), do: dispatch(%{"type" => @create, "title" => title})
+  def create!(title), do: dispatch(%{"type" => @create, "payload" => %{"title" => title}})
 
   def change_title!(id, title),
-    do: dispatch(%{"type" => @change_title, "id" => id, "title" => title})
+    do: dispatch(%{"type" => @change_title, "id" => id, "payload" => %{"title" => title}})
 
-  def toggle_complete!(id), do: dispatch(%{"type" => @toggle_complete, "id" => id})
+  def toggle_complete!(id),
+    do: dispatch(%{"type" => @toggle_complete, "payload" => %{"id" => id}})
+
   def toggle_all_complete!(), do: dispatch(%{"type" => @toggle_all_complete})
-  def remove!(id), do: dispatch(%{"type" => @remove, "id" => id})
+  def remove!(id), do: dispatch(%{"type" => @remove, "payload" => %{"id" => id}})
   def clear_completed!(), do: dispatch(%{"type" => @clear_completed})
 
-  def reduce(state, %{"type" => @create, "title" => title}) do
+  def reduce(state, %{"type" => @create, "payload" => %{"title" => title}}) do
     new_todo = %{id: state.next_todo_id, title: title, complete: false}
 
     {new_todo, %{state | todos: state.todos ++ [new_todo], next_todo_id: state.next_todo_id + 1}}
   end
 
-  def reduce(state, %{"type" => @change_title, "id" => id, "title" => title}) do
+  def reduce(state, %{"type" => @change_title, "payload" => %{"id" => id, "title" => title}}) do
     todo_index = Enum.find_index(state.todos, &(&1.id == id))
 
     if is_nil(todo_index) do
@@ -36,7 +38,7 @@ defmodule Todo.TodosStore do
     end
   end
 
-  def reduce(state, %{"type" => @toggle_complete, "id" => id}) do
+  def reduce(state, %{"type" => @toggle_complete, "payload" => %{"id" => id}}) do
     todo_index = Enum.find_index(state.todos, &(&1.id == id))
 
     if is_nil(todo_index) do
@@ -54,7 +56,7 @@ defmodule Todo.TodosStore do
     {:ok, put_in(state, [:todos, Access.all(), :complete], !all_complete)}
   end
 
-  def reduce(state, %{"type" => @remove, "id" => id}) do
+  def reduce(state, %{"type" => @remove, "payload" => %{"id" => id}}) do
     {:ok, %{state | todos: Enum.reject(state.todos, &(&1.id == id))}}
   end
 

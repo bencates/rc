@@ -1,11 +1,10 @@
 import * as React from 'react'
-import { useChannel } from '@rc/rc-react'
-import { useTodos, getTodoCount } from '../todos'
+import { useSelector } from 'react-redux'
+
+import { getTodoCount } from '../channels/todos'
 
 const TodoCount = () => {
-  const [state] = useTodos()
-
-  const todoCount = getTodoCount(state)
+  const todoCount = useSelector(getTodoCount)
 
   const count = todoCount === 0 ? 'no' : todoCount
   const plural = todoCount !== 1
