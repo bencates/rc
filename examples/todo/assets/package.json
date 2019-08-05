@@ -8,7 +8,6 @@
     "dev": "webpack --mode development --watch-stdin"
   },
   "dependencies": {
-    "@rc/rc-react": "^0.1.0",
     "babel-polyfill": "^6.26.0",
     "humps": "^2.0.1",
     "phoenix": "file:../deps/phoenix",
