@@ -22,13 +22,13 @@ defmodule Todo.TodosStore do
   def remove!(id), do: dispatch(%{"type" => @remove, "payload" => %{"id" => id}})
   def clear_completed!(), do: dispatch(%{"type" => @clear_completed})
 
-  def reduce(state, %{"type" => @create, "payload" => %{"title" => title}}) do
+  def reduce(state, @create, %{"title" => title}) do
     new_todo = %{id: state.next_todo_id, title: title, complete: false}
 
     {new_todo, %{state | todos: state.todos ++ [new_todo], next_todo_id: state.next_todo_id + 1}}
   end
 
-  def reduce(state, %{"type" => @change_title, "payload" => %{"id" => id, "title" => title}}) do
+  def reduce(state, @change_title, %{"id" => id, "title" => title}) do
     todo_index = Enum.find_index(state.todos, &(&1.id == id))
 
     if is_nil(todo_index) do
@@ -38,7 +38,7 @@ defmodule Todo.TodosStore do
     end
   end
 
-  def reduce(state, %{"type" => @toggle_complete, "payload" => %{"id" => id}}) do
+  def reduce(state, @toggle_complete, %{"id" => id}) do
     todo_index = Enum.find_index(state.todos, &(&1.id == id))
 
     if is_nil(todo_index) do
@@ -50,17 +50,17 @@ defmodule Todo.TodosStore do
     end
   end
 
-  def reduce(state, %{"type" => @toggle_all_complete}) do
+  def reduce(state, @toggle_all_complete, _payload) do
     all_complete = Enum.all?(state.todos, & &1.complete)
 
     {:ok, put_in(state, [:todos, Access.all(), :complete], !all_complete)}
   end
 
-  def reduce(state, %{"type" => @remove, "payload" => %{"id" => id}}) do
+  def reduce(state, @remove, %{"id" => id}) do
     {:ok, %{state | todos: Enum.reject(state.todos, &(&1.id == id))}}
   end
 
-  def reduce(state, %{"type" => @clear_completed}) do
+  def reduce(state, @clear_completed, _payload) do
     {:ok, %{state | todos: Enum.reject(state.todos, & &1.complete)}}
   end
 end

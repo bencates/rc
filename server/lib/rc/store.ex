@@ -32,7 +32,10 @@ defmodule RC.Store do
 
   @doc false
   def dispatch(state, store, config, action) do
-    {return, new_state} = store.reduce(state, action)
+    type = Map.get(action, "type", nil)
+    payload = Map.get(action, "payload", %{})
+
+    {return, new_state} = store.reduce(state, type, payload)
 
     if Keyword.has_key?(config, :endpoint) && Keyword.has_key?(config, :channel) do
       config[:endpoint].broadcast!(config[:channel], "set_state", new_state)

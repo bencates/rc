@@ -7,8 +7,8 @@ defmodule Chat.RoomListStore do
 
   @type state :: %{optional(String.t()) => room()}
 
-  # TODO: real action type
-  @type action :: term()
+  @type type :: String.t()
+  @type payload :: term()
 
   @spec initial_state() :: state()
   def initial_state(), do: %{}
@@ -16,16 +16,16 @@ defmodule Chat.RoomListStore do
   @create "CREATE"
   @destroy "DESTROY"
 
-  @spec reduce(state(), action()) :: {:ok, state()}
-  def reduce(state, action)
+  @spec reduce(state(), type(), payload()) :: {:ok, state()}
+  def reduce(state, type, payload)
 
-  def reduce(state, %{"type" => @create, "payload" => %{"name" => name}}) do
+  def reduce(state, @create, %{"name" => name}) do
     RoomStore.start_link(name: {:via, Registry, {RoomStore.Registry, name}})
 
     {:ok, Map.put_new(state, name, %{})}
   end
 
-  def reduce(state, %{"type" => @destroy, "payload" => %{"name" => name}}) do
+  def reduce(state, @destroy, %{"name" => name}) do
     {:ok, Map.delete(state, name)}
   end
 end
