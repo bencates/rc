@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Box, BoxProps, Paragraph } from 'grommet'
 
+import { useRoom, createSelectors } from '../channels/room'
+
 interface OwnProps {
   room: string | null
 }
@@ -8,6 +10,12 @@ interface OwnProps {
 type Props = OwnProps & BoxProps
 
 const ChatRoom: React.FC<Props> = ({ room: roomName, ...boxProps }) => {
+  useRoom(roomName)
+
+  const roomSelectors = React.useMemo(() => createSelectors(roomName), [
+    roomName,
+  ])
+
   if (roomName == null) {
     return (
       <Box {...boxProps} align="center" justify="center">
@@ -18,9 +26,7 @@ const ChatRoom: React.FC<Props> = ({ room: roomName, ...boxProps }) => {
     )
   }
 
-  return (
-    <Box {...boxProps}>{roomName}</Box>
-  )
+  return <Box {...boxProps}>{roomName}</Box>
 }
 
 export default ChatRoom

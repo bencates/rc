@@ -1,7 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/App'
+import ReactApp from './components/App'
+import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
+import createStore from './store'
+
+const store = createStore()
+
+const App = () => (
+  <Provider store={store}>
+    <ReactApp />
+  </Provider>
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 

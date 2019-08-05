@@ -5,7 +5,6 @@ import { Logout } from 'grommet-icons'
 import Loading from './Loading'
 import RoomList from './RoomList'
 import ChatRoom from './ChatRoom'
-import { NO_SUCH_ROOM } from '../channels/room'
 
 interface Props {
   userName: string

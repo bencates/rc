@@ -1,0 +1,1 @@
+export { createPhoenixSlice } from './slice'

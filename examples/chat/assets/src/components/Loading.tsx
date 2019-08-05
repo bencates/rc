@@ -1,11 +1,13 @@
 import * as React from 'react'
-import { useConnectionStatus } from '@rc/rc-react'
+import { useSelector } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
 
 import styled, { keyframes } from 'styled-components'
 import { Box } from 'grommet'
 import { Update } from 'grommet-icons'
 import { position } from 'polished'
+
+import { phoenixSelectors } from '../store'
 
 const animationDuration = 300
 
@@ -28,19 +30,25 @@ const UpdateSpinner = styled(Update)`
   animation: ${spin} 2s infinite linear;
 `
 
-const Loading: React.FC = () => {
-  const isConnected = useConnectionStatus()
-
-  // Allow half a second to connect before showing the alert
-  const [justRendered, setJustRendered] = React.useState(true)
+const useTimeout = (time: number): boolean => {
+  const [timeoutExpired, setTimeoutExpired] = React.useState(false)
 
   React.useEffect(() => {
-    setTimeout(() => setJustRendered(false), 500)
-  }, [])
+    setTimeout(() => setTimeoutExpired(true), time)
+  }, [time])
+
+  return timeoutExpired
+}
+
+const Loading: React.FC = () => {
+  // Allow half a second to connect before showing the alert
+  const timeoutExpired = useTimeout(500)
+
+  const isConnected = useSelector(phoenixSelectors.getConnectionStatus)
 
   return (
     <CSSTransition
-      in={!isConnected && !justRendered}
+      in={timeoutExpired && !isConnected}
       timeout={animationDuration}
       mountOnEnter
       unmountOnExit

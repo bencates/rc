@@ -1,9 +1,11 @@
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 import { Anchor, Box, BoxProps, Text } from 'grommet'
 import { CaretNext } from 'grommet-icons'
 
-import NewRoom from './NewRoom'
 import { useRoomList, getRooms } from '../channels/room-list'
+
+import NewRoom from './NewRoom'
 
 interface OwnProps {
   currentRoom: string | null
@@ -13,8 +15,9 @@ interface OwnProps {
 type Props = OwnProps & BoxProps
 
 const RoomList: React.FC<Props> = ({ currentRoom, setRoom, ...boxProps }) => {
-  const [roomListState] = useRoomList()
-  const rooms = getRooms(roomListState)
+  useRoomList()
+
+  const rooms = useSelector(getRooms)
 
   return (
     <Box background="neutral-3" {...boxProps}>

@@ -1,24 +1,25 @@
 import * as React from 'react'
+import { useDispatch } from 'react-redux'
 import { Box, BoxProps, Button, Form, FormField, TextInput } from 'grommet'
 
-import { useRoomList, createRoom } from '../channels/room-list'
+import { createRoom } from '../channels/room-list'
 
 interface CreateRoomEvent extends React.FormEvent<HTMLFormElement> {
   value: { name: string }
 }
 
 const NewRoom: React.FC<BoxProps> = props => {
+  const dispatch = useDispatch()
+
   const [name, setName] = React.useState('')
   const [disabled, setDisabled] = React.useState(false)
   const [error, setError] = React.useState<string | boolean>(false)
-
-  const [, roomListDispatch] = useRoomList()
 
   const handleSubmit = async (event: CreateRoomEvent) => {
     setDisabled(true)
     setError(false)
     try {
-      await roomListDispatch(createRoom(name))
+      await dispatch(createRoom(name))
       setName('')
     } catch (err) {
       setError(err.toString())

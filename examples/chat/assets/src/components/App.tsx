@@ -1,8 +1,9 @@
 import * as React from 'react'
+import { useDispatch } from 'react-redux'
 import { Grommet } from 'grommet'
 
 import { SOCKET_URL } from '../config'
-import { ChannelProvider } from '@rc/rc-react'
+import { connectToSocket, disconnectFromSocket } from '../store'
 
 import Chat from './Chat'
 import LogIn from './LogIn'
@@ -19,6 +20,8 @@ const theme = {
 const LOCAL_STORAGE_KEY = 'chat:username'
 
 const App: React.FC = () => {
+  const dispatch = useDispatch()
+
   const [currentUser, setCurrentUser] = React.useState<null | string>(
     localStorage.getItem(LOCAL_STORAGE_KEY),
   )
@@ -31,14 +34,20 @@ const App: React.FC = () => {
     }
   }, [currentUser])
 
-  const socketOpts = { params: { userName: currentUser } }
+  React.useEffect(() => {
+    if (currentUser) {
+      dispatch(
+        connectToSocket(SOCKET_URL, { params: { userName: currentUser } }),
+      )
+      return () => dispatch(disconnectFromSocket())
+    }
+    return () => {}
+  }, [dispatch, currentUser])
 
   return (
     <Grommet theme={theme} full>
       {currentUser ? (
-        <ChannelProvider endPoint={SOCKET_URL} opts={socketOpts}>
-          <Chat userName={currentUser} logOut={() => setCurrentUser(null)} />
-        </ChannelProvider>
+        <Chat userName={currentUser} logOut={() => setCurrentUser(null)} />
       ) : (
         <LogIn {...{ setCurrentUser }} />
       )}

@@ -1,10 +1,14 @@
-import { useChannel } from '@rc/rc-react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { createSelector } from 'redux-starter-kit'
 
-///////////
-// State //
-///////////
+import { phoenixActions, phoenixSelectors } from '../store'
 
-export interface State {}
+export interface State {
+  [name: string]: {}
+}
+
+const channelName = (roomName: string) => `room:${roomName}`
 
 const initialState: State = {}
 
@@ -12,11 +16,50 @@ const initialState: State = {}
 // Hook //
 //////////
 
-export const useRoom = (name: string | null) =>
-  useChannel<State>(name ? `room:${name}` : null, initialState)
+export const useRoom = (roomName: string | null | false | undefined) => {
+  const dispatch = useDispatch()
+  const socketConnected = useSelector(phoenixSelectors.getConnectionStatus)
 
-////////////
-// Errors //
-////////////
+  useEffect(() => {
+    if (roomName && socketConnected) {
+      dispatch(
+        phoenixActions.joinChannel({
+          channelName: channelName(roomName),
+          initialState,
+        }),
+      )
+      return () => {
+        dispatch(
+          phoenixActions.leaveChannel({ channelName: channelName(roomName) }),
+        )
+      }
+    }
+    return () => {}
+  }, [roomName, dispatch, socketConnected])
+}
 
-export const NO_SUCH_ROOM = 'NO_SUCH_ROOM'
+///////////////
+// Selectors //
+///////////////
+
+export const createSelectors = (
+  roomName: string | null | false | undefined,
+) => {
+  const getState = roomName
+    ? phoenixSelectors.getChannelState(`room:${roomName}`, initialState)
+    : () => initialState
+
+  return {
+    getState,
+    getRooms: createSelector(
+      [getState],
+      (state: State) => Object.keys(state),
+    ),
+  }
+}
+
+/////////////
+// Actions //
+/////////////
+
+export const createActions = (roomName: string) => ({})

@@ -19,13 +19,13 @@ defmodule Chat.RoomListStore do
   @spec reduce(state(), action()) :: {:ok, state()}
   def reduce(state, action)
 
-  def reduce(state, %{"type" => @create, "name" => name}) do
+  def reduce(state, %{"type" => @create, "payload" => %{"name" => name}}) do
     RoomStore.start_link(name: {:via, Registry, {RoomStore.Registry, name}})
 
     {:ok, Map.put_new(state, name, %{})}
   end
 
-  def reduce(state, %{"type" => @destroy, "name" => name}) do
+  def reduce(state, %{"type" => @destroy, "payload" => %{"name" => name}}) do
     {:ok, Map.delete(state, name)}
   end
 end
