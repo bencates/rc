@@ -16,7 +16,7 @@ if [Phoenix.Channel, Phoenix.Socket] |> Enum.all?(&Code.ensure_loaded?/1) do
       {:ok, state, socket}
     end
 
-    def handle_dispatch(socket, action) do
+    def dispatch(socket, action) do
       {store_module, store_pid} = socket.assigns.rc_store
 
       result = store_module.dispatch(store_pid, action)
@@ -26,7 +26,7 @@ if [Phoenix.Channel, Phoenix.Socket] |> Enum.all?(&Code.ensure_loaded?/1) do
       {:reply, reply, socket}
     end
 
-    def handle_set_state(socket, state) do
+    def push_state(socket, state) do
       # TODO: patch state
       Channel.push(socket, "set_state", state)
 
