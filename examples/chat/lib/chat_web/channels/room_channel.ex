@@ -12,6 +12,15 @@ defmodule ChatWeb.RoomChannel do
   end
 
   def handle_in("dispatch", action, socket) do
+    action =
+      case action["type"] do
+        "NEW_MESSAGE" ->
+          put_in(action, ["payload", "sender"], socket.assigns.user_name)
+
+        _ ->
+          action
+      end
+
     RC.Channel.dispatch(socket, action)
   end
 

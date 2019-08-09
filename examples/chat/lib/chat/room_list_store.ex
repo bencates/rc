@@ -1,5 +1,5 @@
 defmodule Chat.RoomListStore do
-  use RC.Store, endpoint: ChatWeb.Endpoint, channel: "room_list"
+  use RC.Store
 
   alias Chat.RoomStore
 

@@ -1,16 +1,21 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createSelector } from 'redux-starter-kit'
+import { createAction, createSelector } from 'redux-starter-kit'
 
 import { phoenixActions, phoenixSelectors } from '../store'
 
+interface Message {
+  sender: string
+  text: string
+}
+
 export interface State {
-  [name: string]: {}
+  messages: Message[]
 }
 
 const channelName = (roomName: string) => `room:${roomName}`
 
-const initialState: State = {}
+const initialState: State = { messages: [] }
 
 //////////
 // Hook //
@@ -51,9 +56,10 @@ export const createSelectors = (
 
   return {
     getState,
-    getRooms: createSelector(
+
+    getMessages: createSelector(
       [getState],
-      (state: State) => Object.keys(state),
+      (state: State) => state.messages,
     ),
   }
 }
@@ -62,4 +68,17 @@ export const createSelectors = (
 // Actions //
 /////////////
 
-export const createActions = (roomName: string) => ({})
+export const createActions = (roomName: string) => {
+  const createServerAction = roomName
+    ? <T>(payload: T) => ({
+        payload,
+        meta: { phoenixChannel: `room:${roomName}` },
+      }) // </T>
+    : <T>(payload: T) => ({ payload }) // </T>
+
+  return {
+    newMessage: createAction('NEW_MESSAGE', (text: string) =>
+      createServerAction({ text }),
+    ),
+  }
+}

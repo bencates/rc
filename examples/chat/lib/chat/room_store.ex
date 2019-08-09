@@ -1,11 +1,25 @@
 defmodule Chat.RoomStore do
-  use RC.Store, endpoint: ChatWeb.Endpoint, channel: "room_list"
+  use RC.Store
 
-  @type state :: %{}
+  @type message :: %{
+          sender: String.t(),
+          text: String.t()
+        }
 
-  # TODO: real action type
-  @type action :: term()
+  @type state :: %{messages: [message()]}
+
+  @new_message "NEW_MESSAGE"
 
   @spec initial_state() :: state()
-  def initial_state(), do: %{}
+  def initial_state(), do: %{messages: []}
+
+  def reduce(state, @new_message, %{"text" => text, "sender" => sender}) do
+    message = %{
+      text: text,
+      sender: sender,
+      sent_at: DateTime.to_iso8601(DateTime.utc_now())
+    }
+
+    {:ok, %{state | messages: [message | state.messages]}}
+  end
 end

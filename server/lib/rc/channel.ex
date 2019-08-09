@@ -20,9 +20,14 @@ if [Phoenix.Channel, Phoenix.Socket] |> Enum.all?(&Code.ensure_loaded?/1) do
       {store_module, store_pid} = socket.assigns.rc_store
 
       result = store_module.dispatch(store_pid, action)
+      state = store_module.get_state(store_pid)
+
+      # TODO: patch state
+      Channel.broadcast!(socket, "set_state", state)
 
       reply = if is_atom(result), do: result, else: {:ok, result}
 
+      # {:reply, reply, Socket.assign(socket, :rc_prev_state, state)}
       {:reply, reply, socket}
     end
 

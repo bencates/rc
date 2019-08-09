@@ -1,5 +1,5 @@
 defmodule Todo.TodosStore do
-  use RC.Store, endpoint: TodoWeb.Endpoint, channel: "todos"
+  use RC.Store
 
   def initial_state(), do: %{todos: [], next_todo_id: 1}
 

@@ -1,5 +1,5 @@
 defmodule RC.Store do
-  defmacro __using__(config) do
+  defmacro __using__(_) do
     quote do
       use Agent
 
@@ -23,7 +23,7 @@ defmodule RC.Store do
       Dispatch an action to the store.
       """
       def dispatch(store \\ __MODULE__, action) do
-        Agent.get_and_update(store, RC.Store, :dispatch, [__MODULE__, unquote(config), action])
+        Agent.get_and_update(store, RC.Store, :dispatch, [__MODULE__, action])
       end
     end
   end
@@ -31,17 +31,11 @@ defmodule RC.Store do
   def get_state(state), do: state
 
   @doc false
-  def dispatch(state, store, config, action) do
+  def dispatch(state, store, action) do
     type = Map.get(action, "type", nil)
     payload = Map.get(action, "payload", %{})
 
-    {return, new_state} = store.reduce(state, type, payload)
-
-    if Keyword.has_key?(config, :endpoint) && Keyword.has_key?(config, :channel) do
-      config[:endpoint].broadcast!(config[:channel], "set_state", new_state)
-    end
-
-    {return, new_state}
+    store.reduce(state, type, payload)
   rescue
     FunctionClauseError ->
       {%{error: "no action matching #{inspect(action)}"}, state}

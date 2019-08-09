@@ -4,6 +4,7 @@ import { Socket, Channel } from 'phoenix'
 export default (actions: any): Middleware => ({ dispatch }) => {
   let socket: Socket | null = null
   const channels: { [key: string]: Channel } = {}
+  ;(window as any).channels = channels
 
   return next => async action => {
     if (action.type === actions.connectToSocket.type) {
