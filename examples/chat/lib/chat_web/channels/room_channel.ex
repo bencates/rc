@@ -2,11 +2,11 @@ defmodule ChatWeb.RoomChannel do
   use ChatWeb, :channel
 
   def join("room:" <> name, _payload, socket) do
-    case Registry.lookup(Chat.RoomStore.Registry, name) do
-      [{room_pid, _}] ->
+    case Chat.RoomStore.Registry.lookup(name) do
+      {:ok, room_pid} ->
         RC.Channel.join(socket, Chat.RoomStore, room_pid)
 
-      [] ->
+      :error ->
         {:error, %{reason: "no such channel"}}
     end
   end

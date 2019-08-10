@@ -1,6 +1,8 @@
 defmodule Chat.RoomStore do
   use RC.Store
 
+  registry()
+
   @type message :: %{
           sender: String.t(),
           text: String.t()

@@ -2,6 +2,7 @@ defmodule RC.Store do
   defmacro __using__(_) do
     quote do
       use Agent
+      import RC.Store, only: :macros
 
       def start_link(opts \\ []) do
         opts = Keyword.put_new(opts, :name, __MODULE__)
@@ -24,6 +25,27 @@ defmodule RC.Store do
       """
       def dispatch(store \\ __MODULE__, action) do
         Agent.get_and_update(store, RC.Store, :dispatch, [__MODULE__, action])
+      end
+    end
+  end
+
+  defmacro registry do
+    store_module = __CALLER__.module
+
+    quote do
+      defmodule Registry do
+        def start_store(name, opts \\ []) do
+          opts = Keyword.put(opts, :name, {:via, :"Elixir.Registry", {__MODULE__, name}})
+
+          unquote(store_module).start_link(opts)
+        end
+
+        def lookup(name) do
+          case :"Elixir.Registry".lookup(__MODULE__, name) do
+            [{pid, _}] -> {:ok, pid}
+            [] -> :error
+          end
+        end
       end
     end
   end

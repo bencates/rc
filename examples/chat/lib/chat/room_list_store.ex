@@ -20,7 +20,7 @@ defmodule Chat.RoomListStore do
   def reduce(state, type, payload)
 
   def reduce(state, @create, %{"name" => name}) do
-    RoomStore.start_link(name: {:via, Registry, {RoomStore.Registry, name}})
+    RoomStore.Registry.start_store(name)
 
     {:ok, Map.put_new(state, name, %{})}
   end
