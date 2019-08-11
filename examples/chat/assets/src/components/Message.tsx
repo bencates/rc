@@ -1,19 +1,33 @@
 import * as React from 'react'
-import { Box, BoxProps } from 'grommet'
+import { Box, BoxProps, Text, Markdown } from 'grommet'
+import TimeAgo from 'react-timeago'
 
-import { State } from '../channels/room'
+import { MessageGroup } from '../channels/room'
 
 interface OwnProps {
-  message: State['messages'][0]
+  messageGroup: MessageGroup
 }
 
 type Props = OwnProps & BoxProps
 
-const Message: React.FC<Props> = ({ message, ...boxProps }) => (
-  <Box as="article" {...boxProps}>
-    <pre>
-      <code>{JSON.stringify(message, null, '  ')}</code>
-    </pre>
+const Message: React.FC<Props> = ({ messageGroup, ...boxProps }) => (
+  <Box as="article" border="top" {...boxProps}>
+    <strong>{messageGroup.sender}:</strong>
+
+    {messageGroup.messages.map(message => (
+      <Box
+        key={+message.sentAt}
+        direction="row"
+        margin={{ left: 'medium' }}
+        align="baseline"
+      >
+        <Markdown>{message.text}</Markdown>
+
+        <Text as="small" size="small" color="dark-6" margin={{ left: 'auto' }}>
+          <TimeAgo date={message.sentAt} />
+        </Text>
+      </Box>
+    ))}
   </Box>
 )
 

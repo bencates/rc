@@ -4,13 +4,20 @@ import { createAction, createSelector } from 'redux-starter-kit'
 
 import { phoenixActions, phoenixSelectors } from '../store'
 
-interface Message {
+export interface MessageGroup {
   sender: string
-  text: string
+  messages: {
+    text: string
+    sentAt: Date
+  }[]
 }
 
 export interface State {
-  messages: Message[]
+  messages: {
+    sender: string
+    text: string
+    sent_at: string
+  }[]
 }
 
 const channelName = (roomName: string) => `room:${roomName}`
@@ -54,14 +61,31 @@ export const createSelectors = (
     ? phoenixSelectors.getChannelState(`room:${roomName}`, initialState)
     : () => initialState
 
-  return {
-    getState,
+  const getMessages = createSelector(
+    [getState],
+    (state: State) => state.messages.reverse(),
+  )
 
-    getMessages: createSelector(
-      [getState],
-      (state: State) => state.messages,
-    ),
-  }
+  const getMessageGroups = createSelector(
+    [getMessages],
+    (messages: State['messages']) =>
+      messages.reduce<MessageGroup[]>((messages, { sender, text, sent_at }) => {
+        const lastMessage = messages.length
+          ? messages[messages.length - 1]
+          : false
+        const sentAt = new Date(Date.parse(sent_at))
+
+        if (!lastMessage || lastMessage.sender !== sender) {
+          return [...messages, { sender, messages: [{ text, sentAt }] }]
+        }
+
+        lastMessage.messages.push({ text, sentAt })
+
+        return messages
+      }, []),
+  )
+
+  return { getState, getMessages, getMessageGroups }
 }
 
 /////////////

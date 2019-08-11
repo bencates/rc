@@ -18,6 +18,7 @@
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
+    "react-timeago": "^4.4.0",
     "react-transition-group": "^4.2.1",
     "redux-starter-kit": "^0.6.3",
     "styled-components": "^4.3.2",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.1",
+    "@types/react-timeago": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^1.12.0",
     "@typescript-eslint/parser": "^1.12.0",
     "eslint": "^6.0.1",

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import styled from 'styled-components/macro'
 import { useSelector } from 'react-redux'
 import { Box, BoxProps, Paragraph } from 'grommet'
 
@@ -13,14 +14,18 @@ interface OwnProps {
 
 type Props = OwnProps & BoxProps
 
+const ScrollBox = styled(Box)`
+  overflow: scroll;
+`
+
 const ChatRoom: React.FC<Props> = ({ room: roomName, ...boxProps }) => {
   useRoom(roomName)
 
-  const { getMessages } = React.useMemo(() => createSelectors(roomName), [
+  const { getMessageGroups } = React.useMemo(() => createSelectors(roomName), [
     roomName,
   ])
 
-  const messages = useSelector(getMessages)
+  const messageGroups = useSelector(getMessageGroups)
 
   if (roomName == null) {
     return (
@@ -34,13 +39,13 @@ const ChatRoom: React.FC<Props> = ({ room: roomName, ...boxProps }) => {
 
   return (
     <Box {...boxProps}>
-      <Box as="section" pad="small" style={{ overflow: 'scroll' }}>
-        {messages.map(message => (
-          <Message message={message} />
+      <ScrollBox as="section" pad="small">
+        {messageGroups.map((messageGroup, idx) => (
+          <Message key={idx} messageGroup={messageGroup} />
         ))}
-      </Box>
+      </ScrollBox>
 
-      <NewMessage roomName={roomName} margin={{ top: 'auto' }} />
+      <NewMessage roomName={roomName} margin={{ top: 'auto' }} flex={false} />
     </Box>
   )
 }
