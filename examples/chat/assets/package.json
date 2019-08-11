@@ -24,7 +24,7 @@
     "typescript": "3.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "./bin/start",
     "build": "react-scripts build",
     "fix": "eslint --fix \"src/**/*.{ts,tsx}\"",
     "test": "react-scripts test",

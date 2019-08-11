@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+// This is a simple wrapper around 'react-scripts start' which will terminate
+// it when STDIN closes. This allows it to be used as a Phoenix watcher in
+// development.
+
+var spawn = require('child_process').spawn
+
+var reactScripts = spawn('react-scripts', ['start'], {
+  detached: true,
+  stdio: 'inherit',
+})
+
+process.stdin.on('end', function() {
+  process.kill(-reactScripts.pid)
+  process.exit()
+})
+process.stdin.resume()
