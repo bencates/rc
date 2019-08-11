@@ -20,7 +20,7 @@ const NewMessage: React.FC<Props> = ({ roomName, ...boxProps }) => {
   const handleSubmit = useAsyncEventHandler<string>(async () => {
     await dispatch(roomActions.newMessage(message))
     setMessage('')
-  })
+  }, [dispatch, roomActions, message, setMessage])
 
   return (
     <Box as="footer" pad="small" border="top" {...boxProps}>

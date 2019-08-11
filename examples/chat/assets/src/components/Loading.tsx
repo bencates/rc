@@ -7,6 +7,7 @@ import { Box } from 'grommet'
 import { Update } from 'grommet-icons'
 import { position } from 'polished'
 
+import useTimeout from '../hooks/timeout'
 import { phoenixSelectors } from '../store'
 
 const animationDuration = 300
@@ -29,16 +30,6 @@ const spin = keyframes`
 const UpdateSpinner = styled(Update)`
   animation: ${spin} 2s infinite linear;
 `
-
-const useTimeout = (time: number): boolean => {
-  const [timeoutExpired, setTimeoutExpired] = React.useState(false)
-
-  React.useEffect(() => {
-    setTimeout(() => setTimeoutExpired(true), time)
-  }, [time])
-
-  return timeoutExpired
-}
 
 const Loading: React.FC = () => {
   // Allow half a second to connect before showing the alert

@@ -17,7 +17,7 @@ const NewRoom: React.FC<BoxProps> = props => {
   const handleSubmit = useAsyncEventHandler<string>(async () => {
     await dispatch(createRoom(name))
     setName('')
-  })
+  }, [dispatch, createRoom, name, setName])
 
   return (
     <Box background="accent-3" pad="small" {...props}>
