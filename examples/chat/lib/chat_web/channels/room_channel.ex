@@ -23,10 +23,4 @@ defmodule ChatWeb.RoomChannel do
 
     RC.Channel.dispatch(socket, action)
   end
-
-  intercept(["set_state"])
-
-  def handle_out("set_state", state, socket) do
-    RC.Channel.push_state(socket, state)
-  end
 end

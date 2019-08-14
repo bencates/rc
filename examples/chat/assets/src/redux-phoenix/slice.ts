@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit'
 import { SocketConnectOption } from 'phoenix'
+import { apply_patch as applyPatch } from 'jsonpatch'
 // import { phoenixMiddleware } from './redux-phoenix'
 
 import createSelectors from './selectors'
@@ -72,6 +73,20 @@ export const createPhoenixSlice = (
       ) {
         if (state.channels[channelName]) {
           state.channels[channelName].state = serverState
+        }
+      },
+
+      patchState(
+        state,
+        {
+          payload: { channelName, patch },
+        }: PayloadAction<{ channelName: string; patch: any }>,
+      ) {
+        if (state.channels[channelName]) {
+          state.channels[channelName].state = applyPatch(
+            state.channels[channelName].state,
+            patch,
+          )
         }
       },
     },

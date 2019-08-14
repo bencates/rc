@@ -56,8 +56,13 @@ defmodule RC.Store do
   def dispatch(state, store, action) do
     type = Map.get(action, "type", nil)
     payload = Map.get(action, "payload", %{})
+    prev_state = state
 
-    store.reduce(state, type, payload)
+    {response, state} = store.reduce(state, type, payload)
+
+    diff = RC.DiffState.diff(prev_state, state)
+
+    {{response, diff}, state}
   rescue
     FunctionClauseError ->
       {%{error: "no action matching #{inspect(action)}"}, state}

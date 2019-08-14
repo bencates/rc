@@ -22,6 +22,7 @@ defmodule RC.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.4.7", optional: true},
+      {:jason, "~> 1.1.2", optional: true}
     ]
   end
 end

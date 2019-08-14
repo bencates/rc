@@ -44,8 +44,8 @@ export default (actions: any): Middleware => ({ dispatch }) => {
       const channel = socket.channel(channelName)
       channels[channelName] = channel
 
-      channel.on('set_state', state => {
-        dispatch(actions.setState({ channelName, state }))
+      channel.on('patch_state', patch => {
+        dispatch(actions.patchState({ channelName, patch }))
       })
 
       channel

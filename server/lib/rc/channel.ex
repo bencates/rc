@@ -7,38 +7,21 @@ if [Phoenix.Channel, Phoenix.Socket] |> Enum.all?(&Code.ensure_loaded?/1) do
     def join(socket, store_module, store_pid) do
       state = store_module.get_state(store_pid)
 
-      socket =
-        socket
-        |> Socket.assign(:rc_store, {store_module, store_pid})
-
-      # |> Socket.assign(:rc_prev_state, state)
+      socket = put_in(socket.private[:rc_store], {store_module, store_pid})
 
       {:ok, state, socket}
     end
 
     def dispatch(socket, action) do
-      {store_module, store_pid} = socket.assigns.rc_store
+      {store_module, store_pid} = socket.private[:rc_store]
 
-      result = store_module.dispatch(store_pid, action)
-      state = store_module.get_state(store_pid)
+      {result, diff} = store_module.dispatch(store_pid, action)
 
-      # TODO: patch state
-      Channel.broadcast!(socket, "set_state", state)
+      Channel.broadcast!(socket, "patch_state", diff)
 
       reply = if is_atom(result), do: result, else: {:ok, result}
 
-      # {:reply, reply, Socket.assign(socket, :rc_prev_state, state)}
       {:reply, reply, socket}
     end
-
-    def push_state(socket, state) do
-      # TODO: patch state
-      Channel.push(socket, "set_state", state)
-
-      # {:noreply, Socket.assign(socket, :rc_prev_state, state)}
-      {:noreply, socket}
-    end
-
-    # defp prev_state(socket), do: socket.assigns.rc_prev_state
   end
 end

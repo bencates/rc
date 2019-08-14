@@ -63,7 +63,7 @@ export const createSelectors = (
 
   const getMessages = createSelector(
     [getState],
-    (state: State) => state.messages.reverse(),
+    (state: State) => state.messages,
   )
 
   const getMessageGroups = createSelector(

@@ -12,6 +12,7 @@
     "@types/styled-components": "^4.1.18",
     "grommet": "^2.7.3",
     "grommet-icons": "^4.2.0",
+    "jsonpatch": "^3.0.1",
     "phoenix": "^1.4.9",
     "polished": "^3.4.1",
     "react": "^16.8.6",

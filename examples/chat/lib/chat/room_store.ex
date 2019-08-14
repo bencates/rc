@@ -22,6 +22,6 @@ defmodule Chat.RoomStore do
       sent_at: DateTime.to_iso8601(DateTime.utc_now())
     }
 
-    {:ok, %{state | messages: [message | state.messages]}}
+    {:ok, %{state | messages: state.messages ++ [message]}}
   end
 end
