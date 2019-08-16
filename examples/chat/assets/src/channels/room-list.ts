@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { createSelector } from 'redux-starter-kit'
 
 import { phoenixActions, phoenixSelectors } from '../store'
+import useChannel from '../hooks/channel'
 
 export interface State {
   [name: string]: {}
@@ -16,20 +15,7 @@ const initialState: State = {}
 // Hook //
 //////////
 
-export const useRoomList = () => {
-  const dispatch = useDispatch()
-  const socketConnected = useSelector(phoenixSelectors.getConnectionStatus)
-
-  useEffect(() => {
-    if (socketConnected) {
-      dispatch(phoenixActions.joinChannel({ channelName, initialState }))
-      return () => {
-        dispatch(phoenixActions.leaveChannel({ channelName }))
-      }
-    }
-    return () => {}
-  }, [dispatch, socketConnected])
-}
+export const useRoomList = () => useChannel(channelName, initialState)
 
 ///////////////
 // Selectors //

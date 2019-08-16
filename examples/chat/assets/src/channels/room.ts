@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { createAction, createSelector } from 'redux-starter-kit'
 
 import { phoenixActions, phoenixSelectors } from '../store'
+import useChannel from '../hooks/channel'
 
 export interface MessageGroup {
   sender: string
@@ -28,27 +27,8 @@ const initialState: State = { messages: [] }
 // Hook //
 //////////
 
-export const useRoom = (roomName: string | null | false | undefined) => {
-  const dispatch = useDispatch()
-  const socketConnected = useSelector(phoenixSelectors.getConnectionStatus)
-
-  useEffect(() => {
-    if (roomName && socketConnected) {
-      dispatch(
-        phoenixActions.joinChannel({
-          channelName: channelName(roomName),
-          initialState,
-        }),
-      )
-      return () => {
-        dispatch(
-          phoenixActions.leaveChannel({ channelName: channelName(roomName) }),
-        )
-      }
-    }
-    return () => {}
-  }, [roomName, dispatch, socketConnected])
-}
+export const useRoom = (roomName: string | null | false | undefined) =>
+  useChannel(roomName ? channelName(roomName) : null, initialState)
 
 ///////////////
 // Selectors //
@@ -58,7 +38,7 @@ export const createSelectors = (
   roomName: string | null | false | undefined,
 ) => {
   const getState = roomName
-    ? phoenixSelectors.getChannelState(`room:${roomName}`, initialState)
+    ? phoenixSelectors.getChannelState(channelName(roomName), initialState)
     : () => initialState
 
   const getMessages = createSelector(
@@ -96,7 +76,7 @@ export const createActions = (roomName: string) => {
   const createServerAction = roomName
     ? <T>(payload: T) => ({
         payload,
-        meta: { phoenixChannel: `room:${roomName}` },
+        meta: { phoenixChannel: channelName(roomName) },
       }) // </T>
     : <T>(payload: T) => ({ payload }) // </T>
 
