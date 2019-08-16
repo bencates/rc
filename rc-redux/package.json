@@ -1,0 +1,17 @@
+{
+  "name": "rc-redux",
+  "version": "0.1.0",
+  "description": "Reducer Channel Redux middleware",
+  "main": "index.ts",
+  "author": "Ben Cates <ben.cates@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.4"
+  },
+  "dependencies": {
+    "phoenix": "^1.4.9"
+  }
+}

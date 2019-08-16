@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "rc-redux",
     "examples/todo/assets",
     "examples/chat/assets"
   ],
