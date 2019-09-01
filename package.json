@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "rc-redux",
+    "redux-reducer-channel",
     "examples/todo/assets",
     "examples/chat/assets"
   ],

@@ -1,13 +1,14 @@
 import { Middleware } from 'redux'
 import { Socket, Channel } from 'phoenix'
 
-export default (actions: any): Middleware => ({ dispatch }) => {
+import { Actions } from './actions'
+
+export default (actions: Actions): Middleware => ({ dispatch }) => {
   let socket: Socket | null = null
   const channels: { [key: string]: Channel } = {}
-  ;(window as any).channels = channels
 
   return next => async action => {
-    if (action.type === actions.connectToSocket.type) {
+    if (actions.connectToSocket.isAction(action)) {
       const { endPoint, opts } = action.payload
 
       if (socket) {
@@ -22,7 +23,7 @@ export default (actions: any): Middleware => ({ dispatch }) => {
       socket.connect()
     }
 
-    if (action.type === actions.disconnectFromSocket.type) {
+    if (actions.disconnectFromSocket.isAction(action)) {
       if (socket) {
         socket.disconnect()
       }
@@ -30,7 +31,7 @@ export default (actions: any): Middleware => ({ dispatch }) => {
       socket = null
     }
 
-    if (action.type === actions.joinChannel.type) {
+    if (actions.joinChannel.isAction(action)) {
       const { channelName } = action.payload
 
       if (!socket) {
@@ -45,14 +46,12 @@ export default (actions: any): Middleware => ({ dispatch }) => {
       channels[channelName] = channel
 
       channel.on('patch_state', patch => {
-        dispatch(actions.patchState({ channelName, patch }))
+        dispatch(actions.patchState(channelName, patch))
       })
 
       channel
         .join()
-        .receive('ok', state =>
-          dispatch(actions.setState({ channelName, state })),
-        )
+        .receive('ok', state => dispatch(actions.setState(channelName, state)))
         // TODO: real error handling
         // TODO: real timeout handling
         .receive('timeout', () =>
@@ -60,7 +59,7 @@ export default (actions: any): Middleware => ({ dispatch }) => {
         )
     }
 
-    if (action.type === actions.leaveChannel.type) {
+    if (actions.leaveChannel.isAction(action)) {
       const { channelName } = action.payload
 
       if (channels[channelName]) {

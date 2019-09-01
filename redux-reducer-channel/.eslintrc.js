@@ -17,5 +17,15 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
+    '@typescript-eslint/explicit-function-return-type': [
+      'warn',
+      {
+        allowExpressions: true,
+        allowTypedFunctionExpressions: true,
+        allowHigherOrderFunctions: true,
+      },
+    ],
+  },
 }

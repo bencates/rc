@@ -1,11 +1,12 @@
 {
-  "name": "rc-redux",
+  "name": "redux-reducer-channel",
   "version": "0.1.0",
   "description": "Reducer Channel Redux middleware",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "author": "Ben Cates <ben.cates@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "fix": "eslint --fix \"src/**/*.ts\""
   },
   "devDependencies": {
@@ -18,9 +19,10 @@
     "typescript": "^3.5.3"
   },
   "peerDependencies": {
-    "redux": "^4.0.4"
+    "redux": "^4.0.0"
   },
   "dependencies": {
+    "jsonpatch": "^3.0.1",
     "phoenix": "^1.4.9"
   }
 }
