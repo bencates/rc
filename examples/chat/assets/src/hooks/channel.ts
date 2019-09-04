@@ -1,24 +1,19 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { phoenixActions, phoenixSelectors } from '../store'
+import { isConnected, joinChannel, leaveChannel } from '../store'
 
-const defaultInitialState = {}
-
-export default (
-  channelName: string | null | false | undefined,
-  initialState: any = defaultInitialState,
-) => {
+export default (channelName: string | null | false | undefined) => {
   const dispatch = useDispatch()
-  const socketConnected = useSelector(phoenixSelectors.getConnectionStatus)
+  const socketConnected = useSelector(isConnected)
 
   useEffect(() => {
     if (channelName && socketConnected) {
-      dispatch(phoenixActions.joinChannel({ channelName, initialState }))
+      dispatch(joinChannel(channelName))
       return () => {
-        dispatch(phoenixActions.leaveChannel({ channelName }))
+        dispatch(leaveChannel(channelName))
       }
     }
     return () => {}
-  }, [channelName, initialState, dispatch, socketConnected])
+  }, [channelName, dispatch, socketConnected])
 }

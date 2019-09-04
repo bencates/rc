@@ -1,6 +1,6 @@
-import { createSelector } from 'redux-starter-kit'
+import { createSelector } from 'reselect'
 
-import { phoenixActions, phoenixSelectors } from '../store'
+import { getChannelState } from '../store'
 import useChannel from '../hooks/channel'
 
 export interface State {
@@ -15,13 +15,13 @@ const initialState: State = {}
 // Hook //
 //////////
 
-export const useRoomList = () => useChannel(channelName, initialState)
+export const useRoomList = (): void => useChannel(channelName)
 
 ///////////////
 // Selectors //
 ///////////////
 
-const getState = phoenixSelectors.getChannelState(channelName, initialState)
+const getState = getChannelState(channelName, initialState)
 
 export const getRooms = createSelector(
   [getState],

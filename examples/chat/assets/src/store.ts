@@ -1,30 +1,30 @@
-import { configureStore, getDefaultMiddleware } from 'redux-starter-kit'
-import { SocketConnectOption } from 'phoenix'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import createReducerChannelSlice from 'redux-reducer-channel'
 
-import { createPhoenixSlice } from './redux-phoenix'
+const {
+  reducer: reducerChannelReducer,
+  actions: reducerChannelActions,
+  selectors: reducerChannelSelectors,
+  middleware: reducerChannelMiddleware,
+} = createReducerChannelSlice('phoenix')
 
 export const {
-  reducer: phoenixReducer,
-  actions: phoenixActions,
-  selectors: phoenixSelectors,
-  middleware: phoenixMiddleware,
-} = createPhoenixSlice('phoenix')
+  connectToSocket,
+  disconnectFromSocket,
+  joinChannel,
+  leaveChannel,
+} = reducerChannelActions
+export const { isConnected, getChannelState } = reducerChannelSelectors
 
-export const connectToSocket = (
-  endPoint: string,
-  opts: Partial<SocketConnectOption> = {},
-) => phoenixActions.connectToSocket({ endPoint, opts })
+export default () => {
+  const middleware = applyMiddleware(reducerChannelMiddleware)
 
-export const disconnectFromSocket = () => phoenixActions.disconnectFromSocket()
+  const enhancers = composeWithDevTools(middleware)
 
-export const joinChannel = (channelName: string, initialState: any = {}) =>
-  phoenixActions.joinChannel({ channelName, initialState })
+  const reducer = combineReducers({ phoenix: reducerChannelReducer })
 
-export const leaveChannel = (channelName: string) =>
-  phoenixActions.leaveChannel({ channelName })
+  const store = createStore(reducer, enhancers)
 
-export default () =>
-  configureStore({
-    reducer: { phoenix: phoenixReducer },
-    middleware: [...getDefaultMiddleware(), phoenixMiddleware],
-  })
+  return store
+}

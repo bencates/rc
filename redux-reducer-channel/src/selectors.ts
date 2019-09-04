@@ -25,7 +25,10 @@ export default function(getState: (rootState: RootState) => State): Selectors {
     ) {
       return (rootState: RootState): ChannelState => {
         const state = getState(rootState)
-        if (state.channels[channelName]) {
+        if (
+          state.channels[channelName] &&
+          'state' in state.channels[channelName]
+        ) {
           // NB: We are explicitly typecasting to the provided state type.
           //
           // The type of the state is dictated by the server and varies widely

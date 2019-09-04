@@ -8,7 +8,7 @@ import { Update } from 'grommet-icons'
 import { position } from 'polished'
 
 import useTimeout from '../hooks/timeout'
-import { phoenixSelectors } from '../store'
+import { isConnected } from '../store'
 
 const animationDuration = 300
 
@@ -35,11 +35,11 @@ const Loading: React.FC = () => {
   // Allow half a second to connect before showing the alert
   const timeoutExpired = useTimeout(500)
 
-  const isConnected = useSelector(phoenixSelectors.getConnectionStatus)
+  const connected = useSelector(isConnected)
 
   return (
     <CSSTransition
-      in={timeoutExpired && !isConnected}
+      in={timeoutExpired && !connected}
       timeout={animationDuration}
       mountOnEnter
       unmountOnExit

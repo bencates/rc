@@ -1,6 +1,7 @@
-import { createAction, createSelector } from 'redux-starter-kit'
+// import { createAction } from 'redux-starter-kit'
+import { createSelector } from 'reselect'
 
-import { phoenixActions, phoenixSelectors } from '../store'
+import { getChannelState } from '../store'
 import useChannel from '../hooks/channel'
 
 export interface MessageGroup {
@@ -19,7 +20,7 @@ export interface State {
   }[]
 }
 
-const channelName = (roomName: string) => `room:${roomName}`
+const channelName = (roomName: string): string => `room:${roomName}`
 
 const initialState: State = { messages: [] }
 
@@ -27,8 +28,8 @@ const initialState: State = { messages: [] }
 // Hook //
 //////////
 
-export const useRoom = (roomName: string | null | false | undefined) =>
-  useChannel(roomName ? channelName(roomName) : null, initialState)
+export const useRoom = (roomName: string | null | false | undefined): void =>
+  useChannel(roomName ? channelName(roomName) : null)
 
 ///////////////
 // Selectors //
@@ -38,7 +39,7 @@ export const createSelectors = (
   roomName: string | null | false | undefined,
 ) => {
   const getState = roomName
-    ? phoenixSelectors.getChannelState(channelName(roomName), initialState)
+    ? getChannelState(channelName(roomName), initialState)
     : () => initialState
 
   const getMessages = createSelector(
@@ -73,16 +74,11 @@ export const createSelectors = (
 /////////////
 
 export const createActions = (roomName: string) => {
-  const createServerAction = roomName
-    ? <T>(payload: T) => ({
-        payload,
-        meta: { phoenixChannel: channelName(roomName) },
-      }) // </T>
-    : <T>(payload: T) => ({ payload }) // </T>
-
   return {
-    newMessage: createAction('NEW_MESSAGE', (text: string) =>
-      createServerAction({ text }),
-    ),
+    newMessage: (text: string) => ({
+      type: 'NEW_MESSAGE',
+      payload: { text },
+      meta: { phoenixChannel: channelName(roomName) },
+    }),
   }
 }
