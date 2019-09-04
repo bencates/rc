@@ -64,16 +64,46 @@ function createAction<Action extends ActionType, Args extends any[]>(
 }
 
 export interface Actions {
+  /**
+   * Initiates a Phoenix socket connection.
+   *
+   * Please see the [Phoenix documentation](https://hexdocs.pm/phoenix/js/) for
+   * details on the connection options.
+   */
   connectToSocket: ActionCreator<
     ConnectToSocketAction,
     [string, Partial<SocketConnectOption>]
   >
-  socketConnected: ActionCreator<SocketConnectedAction>
-  socketDisconnected: ActionCreator<SocketDisconnectedAction>
+
+  /** Gracefully closes the existing socket connection. */
   disconnectFromSocket: ActionCreator<DisconnectFromSocketAction>
+
+  /** Dispatched automatically by the middleware when the socket connects. */
+  socketConnected: ActionCreator<SocketConnectedAction>
+
+  /**
+   * Dispatched automatically by the middleware when the socket connection is
+   * lost.
+   */
+  socketDisconnected: ActionCreator<SocketDisconnectedAction>
+
+  /** Joins a channel. */
   joinChannel: ActionCreator<JoinChannelAction, [string]>
+
+  /** Closes an open channel. */
   leaveChannel: ActionCreator<LeaveChannelAction, [string]>
+
+  /**
+   * Dispatched by the server when a channel is joined. This contains a
+   * snapshot of the server state at the time of connection.
+   */
   setState: ActionCreator<SetStateAction, [string, unknown]>
+
+  /**
+   * Dispatched by the server when the server state is updated. Contains a
+   * [JSON Patch](http://jsonpatch.com/) to update the local channel state to
+   * match the new server state.
+   */
   patchState: ActionCreator<PatchStateAction, [string, object[]]>
 }
 

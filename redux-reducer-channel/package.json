@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "docs": "typedoc --out docs src",
     "fix": "eslint --fix \"src/**/*.ts\""
   },
   "devDependencies": {
@@ -16,6 +17,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.18.2",
+    "typedoc": "^0.15.0",
     "typescript": "^3.5.3"
   },
   "peerDependencies": {

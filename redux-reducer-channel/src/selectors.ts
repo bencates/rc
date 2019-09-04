@@ -4,8 +4,28 @@ import { State } from './reducer'
 type RootState = any
 
 export interface Selectors {
+  /** Checks whether the socket connection has been initiated */
+  hasSocket(rootState: RootState): boolean
+
+  /** Checks whether the socket is connected */
   isConnected(rootState: RootState): boolean
 
+  /** Checks whether a channel has been joined */
+  hasChannel(channelName: string): (rootState: RootState) => boolean
+
+  /**
+   * Retrieves the channel state, if it exists, or the provided initial state.
+   *
+   * Note that this explictly typecasts the channel's state to the
+   * `ChannelState` type (which is inferred from `initialState` by default).
+   *
+   * The type of the state is dictated by the server and varies widely
+   * from channel to channel, so there's not much we can do at build
+   * time to validate the types aside from trust that the user's type
+   * definition properly documents the server state. However, assuming the
+   * server state is documented correctly this will insure type safety
+   * throughout the rest of the program.
+   */
   getChannelState<ChannelState extends {}>(
     channelName: string,
     initialState: ChannelState,
@@ -14,9 +34,19 @@ export interface Selectors {
 
 export default function(getState: (rootState: RootState) => State): Selectors {
   return {
+    hasSocket: (rootState: RootState): boolean => {
+      const state = getState(rootState)
+      return !!state.socket
+    },
+
     isConnected: (rootState: RootState): boolean => {
       const state = getState(rootState)
       return !!(state.socket && state.socket.connected)
+    },
+
+    hasChannel: (channelName: string) => (rootState: RootState): boolean => {
+      const state = getState(rootState)
+      return channelName in state.channels
     },
 
     getChannelState<ChannelState>(
@@ -29,12 +59,6 @@ export default function(getState: (rootState: RootState) => State): Selectors {
           state.channels[channelName] &&
           'state' in state.channels[channelName]
         ) {
-          // NB: We are explicitly typecasting to the provided state type.
-          //
-          // The type of the state is dictated by the server and varies widely
-          // from channel to channel, so there's not much we can do at build
-          // time to validate the types aside from trust that the user's type
-          // definition properly documents the server state.
           return state.channels[channelName].state as ChannelState
         } else {
           return initialState
