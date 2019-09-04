@@ -1,5 +1,5 @@
-// import { createAction } from 'redux-starter-kit'
 import { createSelector } from 'reselect'
+import { createChannelAction } from 'redux-reducer-channel'
 
 import { getChannelState } from '../store'
 import useChannel from '../hooks/channel'
@@ -74,11 +74,11 @@ export const createSelectors = (
 /////////////
 
 export const createActions = (roomName: string) => {
+  const channel = channelName(roomName)
+
   return {
-    newMessage: (text: string) => ({
-      type: 'NEW_MESSAGE',
-      payload: { text },
-      meta: { phoenixChannel: channelName(roomName) },
-    }),
+    newMessage: createChannelAction('NEW_MESSAGE', channel, (text: string) => ({
+      text,
+    })),
   }
 }

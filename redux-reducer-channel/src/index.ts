@@ -1,3 +1,5 @@
+import { Action as ReduxAction } from 'redux'
+
 import createActions from './actions'
 import createReducer, { State } from './reducer'
 import createSelectors from './selectors'
@@ -26,4 +28,40 @@ export default function createSlice(
     : createSelectors((state: State) => state)
 
   return { actions, middleware, reducer, selectors }
+}
+
+interface ChannelAction<P> extends ReduxAction<string> {
+  payload: P
+  meta: { phoenixChannel: string }
+}
+
+interface ChannelActionCreator<Payload, Args extends unknown[]> {
+  (...a: Args): ChannelAction<Payload>
+  type: string
+}
+
+export function createChannelAction<Payload = {}, Args extends unknown[] = []>(
+  actionType: string,
+  channel: string,
+  createPayload: (...args: Args) => Payload = () => ({} as Payload),
+): ChannelActionCreator<Payload, Args> {
+  const actionCreator = (...args: Args): ChannelAction<Payload> => {
+    const action: ChannelAction<Payload> = {
+      type: actionType,
+      payload: createPayload(...args),
+      meta: { phoenixChannel: channel },
+    }
+
+    return action
+  }
+
+  actionCreator.type = actionType
+
+  actionCreator.toString = () => `${actionType}`
+
+  actionCreator.isAction = (
+    action: ReduxAction,
+  ): action is ChannelAction<Payload> => action.type === actionType
+
+  return actionCreator
 }

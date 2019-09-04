@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { createChannelAction } from 'redux-reducer-channel'
 
 import { getChannelState } from '../store'
 import useChannel from '../hooks/channel'
@@ -32,8 +33,8 @@ export const getRooms = createSelector(
 // Actions //
 /////////////
 
-export const createRoom = (name: string) => ({
-  type: 'CREATE',
-  payload: { name },
-  meta: { phoenixChannel: channelName },
-})
+export const createRoom = createChannelAction(
+  'CREATE',
+  channelName,
+  (name: string) => ({ name }),
+)
