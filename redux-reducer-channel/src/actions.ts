@@ -110,7 +110,7 @@ export interface Actions {
 export default function createActions(namespace: string | unknown): Actions {
   const createActionType = namespace
     ? (type: string) => `rc/${namespace}/${type}`
-    : (type: string) => `rc/${type}/`
+    : (type: string) => `rc/${type}`
 
   return {
     connectToSocket: createAction(

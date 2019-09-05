@@ -9,13 +9,11 @@ import { Provider } from 'react-redux'
 
 import createStore, { connectToSocket, joinChannel } from './store'
 
-import { initialState as todosInitialState } from './channels/todos'
-
 import TodoApp from './components/todo-app.jsx'
 
 const store = createStore()
 store.dispatch(connectToSocket('ws://localhost:4000/socket'))
-store.dispatch(joinChannel('todos', todosInitialState))
+store.dispatch(joinChannel('todos'))
 
 const App = () => (
   <Provider store={store}>

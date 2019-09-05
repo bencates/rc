@@ -1,69 +1,61 @@
-import { createAction, createSelector } from 'redux-starter-kit'
-import phoenixSlice from '../store/phoenix'
+import { createChannelAction } from 'redux-reducer-channel'
+
+import { getChannelState } from '../store'
 
 ///////////////////
 // Initial State //
 ///////////////////
 
-export const initialState = { todos: [] }
+const initialState = { todos: [] }
 
 /////////////
 // Actions //
 /////////////
 
-export const createTodo = createAction('todos/CREATE', title => ({
-  payload: { title },
-  meta: { phoenixChannel: 'todos' },
-}))
+export const createTodo = createChannelAction(
+  'todos/CREATE',
+  'todos',
+  title => ({ title }),
+)
 
-export const changeTodoTitle = createAction(
+export const changeTodoTitle = createChannelAction(
   'todos/CHANGE_TITLE',
-  (id, title) => ({
-    payload: { id, title },
-    meta: { phoenixChannel: 'todos' },
-  }),
+  'todos',
+  (id, title) => ({ id, title }),
 )
 
-export const toggleTodoComplete = createAction('todos/TOGGLE_COMPLETE', id => ({
-  payload: { id },
-  meta: { phoenixChannel: 'todos' },
-}))
+export const toggleTodoComplete = createChannelAction(
+  'todos/TOGGLE_COMPLETE',
+  'todos',
+  id => ({ id }),
+)
 
-export const toggleAllTodosComplete = createAction(
+export const toggleAllTodosComplete = createChannelAction(
   'todos/TOGGLE_ALL_COMPLETE',
-  () => ({ payload: {}, meta: { phoenixChannel: 'todos' } }),
+  'todos',
 )
 
-export const removeTodo = createAction('todos/REMOVE', id => ({
-  payload: { id },
-  meta: { phoenixChannel: 'todos' },
+export const removeTodo = createChannelAction('todos/REMOVE', 'todos', id => ({
+  id,
 }))
 
-export const clearCompletedTodos = createAction(
+export const clearCompletedTodos = createChannelAction(
   'todos/CLEAR_COMPLETED',
-  () => ({ payload: {}, meta: { phoenixChannel: 'todos' } }),
+  'todos',
 )
 
 ///////////////
 // Selectors //
 ///////////////
 
-export const getTodos = createSelector(
-  [phoenixSlice.selectors.getState],
-  ({ channels }) => channels.todos.state.todos,
-)
+const getState = getChannelState('todos', initialState)
 
-export const getTodoCount = createSelector(
-  [getTodos],
-  todos => todos.length,
-)
+export const getTodos = state => getState(state).todos
 
-export const areAnyTodosComplete = createSelector(
-  [getTodos],
-  todos => todos.some(t => t.complete),
-)
+export const getTodoCount = state => getTodos(state).length
 
-export const areAllTodosComplete = createSelector(
-  [getTodos],
-  todos => todos.every(t => t.complete),
-)
+export const areAnyTodosComplete = state =>
+  getTodos(state).some(t => t.complete)
+
+export const areAllTodosComplete = state =>
+  getTodos(state).every(t => t.complete)
