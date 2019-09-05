@@ -40,7 +40,7 @@ defmodule Chat.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:rc, path: "../../server"},
+      {:phoenix_reducer_channel, path: "../../phoenix_reducer_channel"},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false}
     ]

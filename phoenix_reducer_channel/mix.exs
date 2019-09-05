@@ -3,7 +3,7 @@ defmodule RC.MixProject do
 
   def project do
     [
-      app: :rc,
+      app: :phoenix_reducer_channel,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
@@ -22,7 +22,8 @@ defmodule RC.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.4.7", optional: true},
-      {:jason, "~> 1.1.2", optional: true}
+      {:jason, "~> 1.1.2", optional: true},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
 end

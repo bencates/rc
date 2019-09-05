@@ -1,8 +1,33 @@
 defmodule RC.Store do
+  # TODO: real type
+  @type action :: term()
+
+  @doc """
+  Retrieve a value from the store. Accepts the same query syntax as `Kernel.get_in/2`.
+  """
+  @callback get(store :: Agent.agent(), keys :: [term(), ...]) :: term()
+
+  @doc """
+  Retrieve the entire state.
+  """
+  @callback get_state(store :: Agent.agent()) :: term()
+
+  @doc """
+  Dispatch an action to the store.
+  """
+  # TODO: better return type
+  @callback dispatch(store :: Agent.agent(), action :: action()) ::
+              {:ok, RC.DiffState.diff()} | {{:ok, term()}, RC.DiffState.diff()} | {:error, term()}
+
+  @doc """
+  Sets up the module to act as a store.
+  """
   defmacro __using__(_) do
     quote do
       use Agent
       import RC.Store, only: :macros
+
+      @behaviour RC.Store
 
       def start_link(opts \\ []) do
         opts = Keyword.put_new(opts, :name, __MODULE__)
@@ -10,25 +35,20 @@ defmodule RC.Store do
         Agent.start_link(__MODULE__, :initial_state, [], opts)
       end
 
-      @doc """
-      Retrieve a value from the store. Accepts the same query syntax as `Kernel.get_in/2`.
-      """
+      @impl true
       def get(store \\ __MODULE__, keys), do: Agent.get(store, Kernel, :get_in, keys)
 
-      @doc """
-      Retrieve the entire state.
-      """
+      @impl true
       def get_state(store \\ __MODULE__), do: Agent.get(store, RC.Store, :get_state, [])
 
-      @doc """
-      Dispatch an action to the store.
-      """
+      @impl true
       def dispatch(store \\ __MODULE__, action) do
         Agent.get_and_update(store, RC.Store, :dispatch, [__MODULE__, action])
       end
     end
   end
 
+  # TODO: document registry
   defmacro registry do
     store_module = __CALLER__.module
 
@@ -50,6 +70,7 @@ defmodule RC.Store do
     end
   end
 
+  @doc false
   def get_state(state), do: state
 
   @doc false

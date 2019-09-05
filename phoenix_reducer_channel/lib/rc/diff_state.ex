@@ -1,4 +1,7 @@
 defmodule RC.DiffState do
+  # FIXME: real type
+  @type diff :: term()
+
   defstruct [:diff]
 
   defguardp both_maps(a, b) when is_map(a) and is_map(b)
