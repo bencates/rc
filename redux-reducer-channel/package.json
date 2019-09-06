@@ -1,7 +1,7 @@
 {
   "name": "redux-reducer-channel",
   "version": "0.1.0",
-  "description": "Reducer Channel Redux middleware",
+  "description": "Server-side Redux reducers over Phoenix channels",
   "main": "dist/index.js",
   "author": "Ben Cates <ben.cates@gmail.com>",
   "license": "MIT",
